@@ -1,0 +1,277 @@
+// --- Main Application Logic ---
+const app = {
+  // --- JSONP API Client ---
+  gasApi: { /* ... (no change) ... */ },
+
+  state: { /* ... (no change) ... */ },
+  dom: {},
+  config: {},
+  templates: {}, // Will be populated on-demand
+  maintenanceData: {},
+
+  cacheDomElements() { /* ... (no change) ... */ },
+
+  init() {
+    this.cacheDomElements();
+    this.showLoader('正在初始化應用...');
+    
+    this.gasApi.run('getInitialPayload')
+      .then(response => {
+        if (response.success) {
+            const payload = response.data;
+            this.config = payload.config;
+            // Templates are no longer loaded initially
+            this.maintenanceData = payload.maintenanceData;
+            this.setupEventListeners();
+            this.renderTabs();
+            this.loadPersistedData();
+            this.hideLoader();
+            this.dom.userNameInput.focus();
+            this.setActiveTab('in-factory');
+        } else {
+            this.handleError(response.message);
+        }
+      })
+      .catch(this.handleError.bind(this));
+  },
+
+  // MODIFIED: Removed length check for frame number
+  startProcess() {
+    const frameNumber = this.dom.frameNumberInput.value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (!this.dom.userNameInput.value.trim()) return this.showNotification('請輸入作業人員', 'error');
+    // The check for frameNumber.length < 6 has been removed.
+    if (!frameNumber) return this.showNotification('請輸入有效車架號碼', 'error');
+    
+    this.dom.frameNumberInput.value = frameNumber;
+    this.state.currentFrameNumber = frameNumber;
+    this.fetchAndShowProgressDashboard(frameNumber);
+  },
+
+  fetchAndShowProgressDashboard(frameNumber) { /* ... */ },
+
+  // Fetches the form structure (JSON) from the backend
+  fetchFormStructure(formId) {
+    this.showLoader(`正在載入表單 ${formId} 結構...`);
+    return this.gasApi.run('getFormStructure', { formId })
+      .then(response => {
+        this.hideLoader();
+        if (response.success) {
+          return response.data; // Returns the JSON structure
+        } else {
+          throw new Error(response.message);
+        }
+      });
+  },
+
+  // Builds an HTML form from a JSON structure object
+  buildFormHtml(formStructure) {
+    let html = `<form id="${formStructure.id || 'dynamic-form'}">`;
+    formStructure.groups.forEach(group => {
+      html += `<fieldset class="form-group">`;
+      if (group.title) {
+        html += `<legend>${group.title}</legend>`;
+      }
+      group.fields.forEach(field => {
+        const fieldId = `${formStructure.id}_${field.name}`;
+        html += `<div class="form-field type-${field.type}">`;
+        html += `<label for="${fieldId}">${field.label}</label>`;
+        switch (field.type) {
+          case 'radio':
+            field.options.forEach(option => {
+              html += `<div class="radio-option">
+                         <input type="radio" id="${fieldId}_${option}" name="${field.name}" value="${option}" required>
+                         <label for="${fieldId}_${option}">${option}</label>
+                       </div>`;
+            });
+            break;
+          case 'checkbox':
+            html += `<input type="checkbox" id="${fieldId}" name="${field.name}">`;
+            break;
+          case 'file':
+            html += `<input type="file" id="${fieldId}" name="${field.name}" accept="image/*" onchange="previewImage(event, '${field.name}_preview')">
+                     <img id="${field.name}_preview" class="image-preview" src="#" alt="預覽">`;
+            break;
+          default: // text, date, etc.
+            html += `<input type="${field.type}" id="${fieldId}" name="${field.name}" required>`;
+            break;
+        }
+        html += `</div>`;
+      });
+      html += `</fieldset>`;
+    });
+    html += `</form>`;
+    return html;
+  },
+
+  // MODIFIED: showFormBase now implements lazy loading AND dynamic rendering
+  async showFormBase(formId, isEdit, context) {
+    try {
+      // Always fetch the structure for now, caching can be added later if needed.
+      const formStructure = await this.fetchFormStructure(formId);
+      if (!formStructure) {
+        return this.handleError(`無法載入表單 ${formId} 的結構。`);
+      }
+      
+      // Add formId to the structure for easier reference in buildFormHtml
+      formStructure.id = formId; 
+      const formHtml = this.buildFormHtml(formStructure);
+
+      const userName = this.dom.userNameInput.value.trim();
+      this.dom.workflowContainer.innerHTML = `
+        <div class="content-card active">
+          <div class="workflow-header"> <h2>${context.title}</h2> <p>${context.subtitle} | 作業人員: <strong>${userName}</strong></p> </div>
+          <div class="form-container">${formHtml}</div>
+          <div class="workflow-actions">${context.backButton}</div>
+        </div>`;
+        
+      const form = this.dom.workflowContainer.querySelector('form');
+      document.body.classList.add('webapp-context');
+      form.onsubmit = this.handleFormSubmit.bind(this);
+      
+      // Populate common fields and load existing data if in edit mode
+      if (this.config.IN_FACTORY_FORMS.includes(formId) && this.state.currentFrameNumber) {
+          this.populateDynamicFields(form, formId, this.state.currentFrameNumber);
+          if (isEdit) {
+              this.loadAndPopulateFormData(form, formId, this.state.currentFrameNumber);
+          }
+      } else if (this.config.OUT_FACTORY_FORMS.includes(formId) && isEdit) {
+          // Note: Out-factory forms might need a different identifier than frameNumber to load data
+          this.loadAndPopulateFormData(form, formId, this.state.currentFrameNumber);
+      }
+
+      this.showScreen('workflow-container');
+
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
+
+  // ... (The rest of the functions remain unchanged) ...
+  gasApi: {
+    run(action, params = {}) {
+      const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyw4em9OjJVAaXBciPOoeT5qFosmIza7NQ5idgibY4qI7dupH34NAyJTH3F5tbOGmhn/exec';
+      console.log(`%c[API Request] -> ${action}`, 'color: #0052cc; font-weight: bold;', params);
+      return new Promise((resolve, reject) => {
+        const callbackName = `jsonp_callback_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+        const script = document.createElement('script');
+        let url = `${GAS_WEB_APP_URL}?action=${action}&callback=${callbackName}`;
+        Object.keys(params).forEach(key => {
+            let value = params[key];
+            if (typeof value === 'object') value = JSON.stringify(value);
+            url += `&${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        });
+        script.src = url;
+        const timeoutId = setTimeout(() => {
+          reject(new Error(`Request timed out for action: ${action}`));
+          cleanup();
+        }, 20000);
+        window[callbackName] = (response) => {
+          if (response.success) {
+            console.log(`%c[API Response] <- ${action}`, 'color: #00875a; font-weight: bold;', response);
+          } else {
+            console.error(`%c[API Error] <- ${action}`, 'color: #de350b; font-weight: bold;', response);
+          }
+          resolve(response);
+          cleanup();
+        };
+        const cleanup = () => {
+          clearTimeout(timeoutId);
+          delete window[callbackName];
+          if (script.parentNode) script.parentNode.removeChild(script);
+        };
+        script.onerror = () => {
+          reject(new Error(`Script error for action: ${action}`));
+          cleanup();
+        };
+        document.head.appendChild(script);
+      });
+    }
+  },
+  state: { currentFrameNumber: null, qrScanner: null, isEditMode: false },
+  dom: {},
+  config: {},
+  templates: {},
+  maintenanceData: {},
+  cacheDomElements() {
+    this.dom = {
+      loader: document.getElementById('loader'),
+      notification: document.getElementById('notification'),
+      mainContent: document.getElementById('main-content'),
+      homeScreen: document.getElementById('home-screen'),
+      workflowContainer: document.getElementById('workflow-container'),
+      userNameInput: document.getElementById('user-name-input'),
+      frameNumberInput: document.getElementById('frame-number-input'),
+      tabsContainer: document.getElementById('tabs-container'),
+      inFactoryContent: document.getElementById('in-factory-content'),
+      outFactoryContent: document.getElementById('out-factory-content'),
+      startBtn: document.getElementById('start-btn'),
+      scanBtn: document.getElementById('scan-btn'),
+    };
+  },
+  setupEventListeners() { /* ... */ },
+  setActiveTab(tabId) { /* ... */ },
+  renderTabs() { /* ... */ },
+  loadPersistedData() { /* ... */ },
+  showScreen(screenId) { /* ... */ },
+  showLoader(message = '處理中...') { /* ... */ },
+  hideLoader() { /* ... */ },
+  showNotification(message, type = 'success') { /* ... */ },
+  handleError(error) { /* ... */ },
+  fetchAndShowProgressDashboard(frameNumber) { /* ... */ },
+  renderProgressDashboard(progress) { /* ... */ },
+  showForm(formId, frameNumber, isEdit = false) { /* ... */ },
+  showDirectForm(formId) { /* ... */ },
+  populateDynamicFields(form, formId, frameNumber) { /* ... */ },
+
+  loadAndPopulateFormData(form, formId, frameNumber) {
+    this.showLoader('正在載入歷史資料...');
+    this.gasApi.run('getFormResponseData', { formId, frameNumber })
+      .then(response => {
+        if (response.success && response.data) {
+          const formData = response.data;
+          for (const key in formData) {
+            const value = formData[key];
+            const element = form.querySelector(`[name="${key}"]`);
+            if (element) {
+              switch (element.type) {
+                case 'radio':
+                  // Find the radio button in the group with the matching value and check it
+                  const radioToSelect = form.querySelector(`[name="${key}"][value="${value}"]`);
+                  if (radioToSelect) radioToSelect.checked = true;
+                  break;
+                case 'checkbox':
+                  element.checked = (value === true || value === 'true');
+                  break;
+                case 'file':
+                  // If it's a URL (from a previous upload), display a link
+                  if (typeof value === 'string' && value.startsWith('http')) {
+                    const link = document.createElement('a');
+                    link.href = value;
+                    link.textContent = '查看已上傳的圖片';
+                    link.target = '_blank';
+                    element.parentNode.appendChild(link);
+                  }
+                  break;
+                default:
+                  element.value = value;
+                  break;
+              }
+            }
+          }
+        } else if (!response.success) {
+          this.showNotification(`無法載入資料: ${response.message}`, 'error');
+        }
+        // If no data, the form just remains blank, which is expected.
+        this.hideLoader();
+      })
+      .catch(this.handleError.bind(this));
+  },
+
+  handleFormSubmit(event) { /* ... */ },
+  submitDataToServer(dataObject) { /* ... */ },
+  goHome() { /* ... */ },
+  toggleScanner() { /* ... */ },
+  resizeImage(file, maxWidth, quality, callback) { /* ... */ }
+};
+document.addEventListener('DOMContentLoaded', () => app.init());
+function previewImage(event, previewId) { /* ... */ }
