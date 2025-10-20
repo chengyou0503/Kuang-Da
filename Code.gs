@@ -185,7 +185,7 @@ function doGet(e) {
     const params = e.parameter.params ? JSON.parse(e.parameter.params) : {};
     switch (action) {
       case 'getInitialPayload': result = getInitialPayload(); break;
-      case 'getFormStructure': result = getFormStructure(params.formId); break; // <-- NEW API
+      case 'getFormStructure': result = getFormStructure(e.parameter.formId); break; // <-- FIX
       case 'getVehicleProgress': result = getVehicleProgress(params.frameNumber); break;
       case 'getFormResponseData': result = getFormResponseData(params.formId, params.frameNumber); break;
       case 'processFormSubmit': result = processFormSubmit(params.formData); break;

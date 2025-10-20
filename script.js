@@ -231,19 +231,22 @@ const app = {
           const formData = response.data;
           for (const key in formData) {
             const value = formData[key];
-            const element = form.querySelector(`[name="${key}"]`);
+            
+            // FIX: Handle cases where backend keys might have a redundant prefix (e.g., KD04_KD04_Item1)
+            const nameToFind = key.startsWith(formId + '_') ? key.substring(formId.length + 1) : key;
+            
+            const element = form.querySelector(`[name="${nameToFind}"]`);
+            
             if (element) {
               switch (element.type) {
                 case 'radio':
-                  // Find the radio button in the group with the matching value and check it
-                  const radioToSelect = form.querySelector(`[name="${key}"][value="${value}"]`);
+                  const radioToSelect = form.querySelector(`[name="${nameToFind}"][value="${value}"]`);
                   if (radioToSelect) radioToSelect.checked = true;
                   break;
                 case 'checkbox':
                   element.checked = (value === true || value === 'true');
                   break;
                 case 'file':
-                  // If it's a URL (from a previous upload), display a link
                   if (typeof value === 'string' && value.startsWith('http')) {
                     const link = document.createElement('a');
                     link.href = value;
@@ -261,7 +264,6 @@ const app = {
         } else if (!response.success) {
           this.showNotification(`無法載入資料: ${response.message}`, 'error');
         }
-        // If no data, the form just remains blank, which is expected.
         this.hideLoader();
       })
       .catch(this.handleError.bind(this));
