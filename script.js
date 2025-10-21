@@ -205,11 +205,15 @@ const app = {
 
   // --- Renders the progress stepper dashboard ---
   renderProgressDashboard(progress) {
+    // Defensive check to ensure progress and completedForms are valid
+    const completedForms = (progress && Array.isArray(progress.completedForms)) ? progress.completedForms : [];
+    const nextForm = (progress && progress.nextForm) ? progress.nextForm : null;
+
     let stepsHtml = '<div class="progress-stepper">';
     this.config.IN_FACTORY_FORMS.forEach(formId => {
       const formName = this.maintenanceData[formId] || formId;
-      const isCompleted = progress.completedForms.includes(formId);
-      const isCurrent = progress.nextForm === formId && !isCompleted;
+      const isCompleted = completedForms.includes(formId);
+      const isCurrent = nextForm === formId && !isCompleted;
       
       let stepClass = 'step';
       if (isCompleted) stepClass += ' completed';
