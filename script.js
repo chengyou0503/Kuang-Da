@@ -380,11 +380,14 @@ const app = {
         if (response.success && response.data) {
           const formData = response.data;
           for (const key in formData) {
-            const element = form.querySelector(`[name="${key}"]`);
+            // FIX: Handle cases where backend keys might have a redundant prefix (e.g., KD01_Item1)
+            const nameToFind = key.startsWith(formId + '_') ? key.substring(formId.length + 1) : key;
+            const element = form.querySelector(`[name="${nameToFind}"]`);
+            
             if (element) {
               switch (element.type) {
                 case 'radio':
-                  const radioToSelect = form.querySelector(`[name="${key}"][value="${formData[key]}"]`);
+                  const radioToSelect = form.querySelector(`[name="${nameToFind}"][value="${formData[key]}"]`);
                   if (radioToSelect) radioToSelect.checked = true;
                   break;
                 case 'checkbox':
@@ -392,7 +395,7 @@ const app = {
                   break;
                 case 'file':
                   if (typeof formData[key] === 'string' && formData[key].startsWith('http')) {
-                    const preview = document.getElementById(`${form.id}_${key}_preview`);
+                    const preview = document.getElementById(`${form.id}_${nameToFind}_preview`);
                     if(preview) {
                         preview.src = formData[key];
                         preview.style.display = 'block';
