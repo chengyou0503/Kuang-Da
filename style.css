@@ -113,6 +113,34 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
     font-weight: 600;
 }
 
+#input-area {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Adds space between input and button */
+    margin-bottom: 1rem; /* Adds space below the input group */
+}
+
+#frame-number-input {
+    flex-grow: 1; /* Allows the input to take up available space */
+}
+
+.btn-icon {
+    padding: 0.6rem; /* Makes the button more square-like */
+    background-color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    flex-shrink: 0; /* Prevents the button from shrinking */
+}
+
+.btn-icon:hover {
+    background-color: #e2e6ea;
+}
+
+.btn-icon svg {
+    fill: currentColor;
+}
+
+
 /* --- Workflow & Progress Stepper --- */
 .progress-stepper { display: flex; flex-direction: column; gap: 1rem; }
 .step-content { 
