@@ -248,16 +248,17 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
   .admin-section.full-width { grid-column: 1 / -1; }
 }
 
-/* --- Dynamic Form Styling --- */
+/* --- Dynamic Form Styling (Refined) --- */
 .form-container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem; /* Increased gap for more breathing room */
 }
 
 .form-group {
+  background-color: #f8f9fa; /* Subtle background for grouping */
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 12px; /* Softer corners */
   padding: 1.5rem;
   margin: 0;
 }
@@ -266,13 +267,14 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
   font-weight: 600;
   font-size: 1.1rem;
   padding: 0 0.5rem;
-  margin-left: 1rem;
+  margin-left: 0.5rem; /* Adjusted margin */
+  color: var(--primary-color);
 }
 
 .form-field {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem; /* Increased bottom margin */
 }
 
 .form-field:last-child {
@@ -281,32 +283,46 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
 
 .form-field label {
   font-weight: 500;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem; /* Increased space between label and input */
   color: var(--text-color);
 }
 
 .radio-option {
   display: flex;
   align-items: center;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
   margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.radio-option:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
 }
 
 .radio-option input[type="radio"] {
   width: auto;
   margin-right: 0.75rem;
+  /* Custom radio button style can be added here if desired */
 }
 
 .radio-option label {
   margin-bottom: 0;
   font-weight: 400;
+  flex-grow: 1; /* Make label take up space */
 }
 
 .image-preview {
   max-width: 100%;
   height: auto;
   margin-top: 1rem;
-  border-radius: 6px;
-  border: 1px solid var(--border-color);
+  border-radius: 8px; /* Softer corners */
+  border: 2px dashed var(--border-color); /* Dashed border for placeholder feel */
+  padding: 0.5rem;
 }
 
 .workflow-actions {
