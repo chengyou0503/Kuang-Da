@@ -371,7 +371,6 @@ const app = {
 
   submitDataToServer(dataObject) { /* ... */ },
   goHome() { /* ... */ },
-  toggleScanner() { /* ... */ },
   resizeImage(file, maxWidth, quality, callback) { /* ... */ }
 };
 document.addEventListener('DOMContentLoaded', () => app.init());
