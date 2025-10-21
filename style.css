@@ -134,11 +134,12 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
 }
 
 .btn-icon {
-    padding: 0.6rem; /* Makes the button more square-like */
+    padding: 0.75rem; /* Increased padding to ensure enough space for the icon */
     background-color: var(--secondary-color);
     border: 1px solid var(--border-color);
     color: var(--text-color);
     flex-shrink: 0; /* Prevents the button from shrinking */
+    line-height: 0; /* Helps remove extra space that might push the icon down */
 }
 
 .btn-icon:hover {
@@ -147,6 +148,7 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
 
 .btn-icon svg {
     fill: currentColor;
+    display: block; /* Ensures proper rendering and prevents clipping */
 }
 
 
