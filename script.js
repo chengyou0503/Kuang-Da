@@ -208,7 +208,52 @@ const app = {
       scanBtn: document.getElementById('scan-btn'),
     };
   },
-  setupEventListeners() { /* ... */ },
+  setupEventListeners() {
+    this.dom.startBtn.addEventListener('click', this.startProcess.bind(this));
+    this.dom.scanBtn.addEventListener('click', this.toggleScanner.bind(this));
+    this.dom.frameNumberInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') this.startProcess();
+    });
+    this.dom.tabsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('tab')) {
+            this.setActiveTab(e.target.dataset.tab);
+        }
+    });
+  },
+
+  toggleScanner() {
+    if (this.state.qrScanner) {
+        this.state.qrScanner.stop().then(() => {
+            console.log("QR Code scanning stopped.");
+            this.state.qrScanner = null;
+            document.getElementById('qr-reader').style.display = 'none';
+        }).catch(err => console.error("Error stopping the scanner: ", err));
+    } else {
+        const qrReaderElement = document.getElementById('qr-reader');
+        qrReaderElement.style.display = 'block';
+        this.state.qrScanner = new Html5Qrcode("qr-reader");
+        this.state.qrScanner.start(
+            { facingMode: "environment" },
+            {
+                fps: 10,
+                qrbox: { width: 250, height: 250 }
+            },
+            (decodedText, decodedResult) => {
+                this.dom.frameNumberInput.value = decodedText;
+                this.toggleScanner(); // Stop scanner after successful scan
+                this.startProcess();
+            },
+            (errorMessage) => {
+                // console.log("QR Code scan error: ", errorMessage);
+            }
+        ).catch(err => {
+            console.error("Unable to start scanning.", err);
+            this.showNotification('無法啟動相機，請檢查權限。', 'error');
+            qrReaderElement.style.display = 'none';
+        });
+    }
+  },
+
   setActiveTab(tabId) { /* ... */ },
   renderTabs() { /* ... */ },
   loadPersistedData() { /* ... */ },
@@ -252,7 +297,8 @@ const app = {
                     link.href = value;
                     link.textContent = '查看已上傳的圖片';
                     link.target = '_blank';
-                    element.parentNode.appendChild(link);
+                    link.style.marginLeft = '10px';
+                    element.parentNode.insertBefore(link, element.nextSibling);
                   }
                   break;
                 default:
@@ -269,7 +315,42 @@ const app = {
       .catch(this.handleError.bind(this));
   },
 
-  handleFormSubmit(event) { /* ... */ },
+  async handleFormSubmit(event) {
+    event.preventDefault();
+    this.showLoader('正在提交資料...');
+    const form = event.target;
+    const formData = new FormData(form);
+    const dataObject = Object.fromEntries(formData.entries());
+
+    // --- NEW: Image Upload Handling ---
+    const fileInputs = form.querySelectorAll('input[type="file"]');
+    const imagePromises = [];
+
+    fileInputs.forEach(input => {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const promise = new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            // The backend expects the key like 'photoData1', which is the input's name
+            dataObject[input.name] = e.target.result;
+            resolve();
+          };
+          reader.onerror = (error) => reject(error);
+          reader.readAsDataURL(file);
+        });
+        imagePromises.push(promise);
+      }
+    });
+
+    try {
+      await Promise.all(imagePromises); // Wait for all images to be read
+      this.submitDataToServer(dataObject);
+    } catch (error) {
+      this.handleError('讀取圖片時發生錯誤: ' + error);
+    }
+  },
+
   submitDataToServer(dataObject) { /* ... */ },
   goHome() { /* ... */ },
   toggleScanner() { /* ... */ },
