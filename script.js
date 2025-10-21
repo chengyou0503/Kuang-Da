@@ -257,12 +257,30 @@ const app = {
   setActiveTab(tabId) { /* ... */ },
   renderTabs() { /* ... */ },
   loadPersistedData() { /* ... */ },
-  showScreen(screenId) { /* ... */ },
-  showLoader(message = '處理中...') { /* ... */ },
-  hideLoader() { /* ... */ },
-  showNotification(message, type = 'success') { /* ... */ },
-  handleError(error) { /* ... */ },
-  fetchAndShowProgressDashboard(frameNumber) { /* ... */ },
+  showScreen(screenId) {
+    if (screenId === 'home-screen') {
+      this.dom.homeScreen.style.display = 'block';
+      this.dom.workflowContainer.style.display = 'none';
+    } else {
+      this.dom.homeScreen.style.display = 'none';
+      this.dom.workflowContainer.style.display = 'block';
+    }
+  },
+
+  fetchAndShowProgressDashboard(frameNumber) {
+    this.showLoader('正在查詢車輛進度...');
+    this.gasApi.run('getVehicleProgress', { frameNumber })
+      .then(response => {
+        this.hideLoader();
+        if (response.success) {
+          this.renderProgressDashboard(response.data);
+          this.showScreen('workflow-container');
+        } else {
+          this.handleError(response.message);
+        }
+      })
+      .catch(this.handleError.bind(this));
+  },
   renderProgressDashboard(progress) { /* ... */ },
   showForm(formId, frameNumber, isEdit = false) { /* ... */ },
   showDirectForm(formId) { /* ... */ },

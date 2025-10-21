@@ -45,6 +45,14 @@ body {
 }
 .app-header h1 { margin: 0; font-size: 1.2rem; font-weight: 500; }
 
+.app-footer {
+  text-align: center;
+  padding: 1rem 0;
+  color: var(--text-color-light);
+  font-size: 0.9rem;
+}
+
+
 .main-container { padding: 1rem; max-width: 800px; margin: 0 auto; }
 .content-card { 
   background-color: var(--card-bg); 
