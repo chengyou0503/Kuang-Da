@@ -210,14 +210,17 @@ const app = {
       progress = { completedForms: [], nextForm: null };
     }
     
-    const completedForms = Array.isArray(progress.completedForms) ? progress.completedForms : [];
-    const nextForm = progress.nextForm || null;
+    const completedForms = Array.isArray(progress.completedForms) 
+      ? progress.completedForms.map(id => String(id).trim().toUpperCase()) 
+      : [];
+    const nextForm = progress.nextForm ? String(progress.nextForm).trim().toUpperCase() : null;
 
     let stepsHtml = '<div class="progress-stepper">';
     this.config.IN_FACTORY_FORMS.forEach(formId => {
       const formName = this.maintenanceData[formId] || formId;
-      const isCompleted = completedForms.includes(formId);
-      const isCurrent = nextForm === formId && !isCompleted;
+      const normalizedFormId = String(formId).trim().toUpperCase();
+      const isCompleted = completedForms.includes(normalizedFormId);
+      const isCurrent = nextForm === normalizedFormId && !isCompleted;
       
       let stepClass = 'step';
       if (isCompleted) stepClass += ' completed';
