@@ -204,23 +204,27 @@ const app = {
   },
 
   // --- Renders the progress stepper dashboard ---
-  renderProgressDashboard(progress) {
-    // More robust defensive check: If progress is null or undefined, create a default object.
-    if (!progress) {
-      progress = { completedForms: [], nextForm: null };
+  renderProgressDashboard(data) {
+    // Handle the data structure from the backend { progress: {...}, isNew: true/false }
+    const progress = data.progress || {};
+    const completedForms = Object.keys(progress).filter(key => progress[key] === true)
+                                 .map(id => String(id).trim().toUpperCase());
+
+    let nextForm = null;
+    for (const formId of this.config.IN_FACTORY_FORMS) {
+      const normalizedFormId = String(formId).trim().toUpperCase();
+      if (!completedForms.includes(normalizedFormId)) {
+        nextForm = normalizedFormId;
+        break;
+      }
     }
-    
-    const completedForms = Array.isArray(progress.completedForms) 
-      ? progress.completedForms.map(id => String(id).trim().toUpperCase()) 
-      : [];
-    const nextForm = progress.nextForm ? String(progress.nextForm).trim().toUpperCase() : null;
 
     let stepsHtml = '<div class="progress-stepper">';
     this.config.IN_FACTORY_FORMS.forEach(formId => {
       const formName = this.maintenanceData[formId] || formId;
       const normalizedFormId = String(formId).trim().toUpperCase();
       const isCompleted = completedForms.includes(normalizedFormId);
-      const isCurrent = nextForm === normalizedFormId && !isCompleted;
+      const isCurrent = nextForm === normalizedFormId;
       
       let stepClass = 'step';
       if (isCompleted) stepClass += ' completed';
@@ -356,7 +360,7 @@ const app = {
 
   // --- Fetches form structure from the backend ---
   fetchFormStructure(formId) {
-    return this.gasApi.run('getFormStructure', { formId })
+    return this.gasApi.run('getFormStructure', { formId }) // CONFIRMED: This action is correct
       .then(response => {
         if (response.success) return response.data;
         throw new Error(response.message);
@@ -485,7 +489,7 @@ const app = {
 
   // --- Submits data to the server ---
   submitDataToServer(dataObject) {
-    this.gasApi.run('submitForm', dataObject)
+    this.gasApi.run('processFormSubmit', { formData: dataObject }) // FIX: Changed action to 'processFormSubmit' and wrapped data
       .then(response => {
         if (response.success) {
           this.showNotification('資料提交成功！', 'success');
