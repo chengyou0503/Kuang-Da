@@ -231,7 +231,7 @@ const app = {
           <div class="step-content">
             <h3>${formName} <span class="status-indicator">${isCompleted ? '✓ 已完成' : (isCurrent ? '» 進行中' : '待辦')}</span></h3>
             <p>狀態: ${isCompleted ? '已完成' : '未完成'}</p>
-            <button class="btn-primary" onclick="app.showForm('${formId}', '${this.state.currentFrameNumber}', ${isCompleted})">
+            <button class="btn-primary" data-form-id="${formId}" data-is-completed="${isCompleted}">
               ${isCompleted ? '查看/編輯' : '開始作業'}
             </button>
           </div>
@@ -247,33 +247,42 @@ const app = {
         </div>
         ${stepsHtml}
         <div class="workflow-actions">
-          <button class="btn-secondary" onclick="app.goHome()">返回主畫面</button>
+          <button class="btn-secondary" id="back-to-home">返回主畫面</button>
         </div>
       </div>`;
+
+    // Use Event Listeners instead of onclick
+    this.dom.workflowContainer.querySelector('#back-to-home').addEventListener('click', () => this.goHome());
+    this.dom.workflowContainer.querySelectorAll('.btn-primary').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const formId = e.currentTarget.dataset.formId;
+        const isCompleted = e.currentTarget.dataset.isCompleted === 'true';
+        this.showForm(formId, this.state.currentFrameNumber, isCompleted);
+      });
+    });
   },
 
-  // --- Shows a specific form ---
-  showForm(formId, frameNumber, isEdit = false) {
-    this.state.isEditMode = isEdit;
-    const formName = this.maintenanceData[formId] || formId;
-    const context = {
-      title: formName,
-      subtitle: `車架號碼: ${frameNumber}`,
-      backButton: `<button class="btn-secondary" onclick="app.fetchAndShowProgressDashboard('${frameNumber}')">返回進度儀表板</button>`
-    };
-    this.showFormBase(formId, isEdit, context);
-  },
-  
-  // --- Shows a form that is not tied to a frame number ---
-  showDirectForm(formId) {
-    this.state.isEditMode = false; // These forms are typically for new entries
-    const formName = this.maintenanceData[formId] || formId;
-    const context = {
-        title: formName,
-        subtitle: '請填寫以下欄位',
-        backButton: `<button class="btn-secondary" onclick="app.goHome()">返回主畫面</button>`
-    };
-    this.showFormBase(formId, false, context);
+  // --- Renders buttons for out-of-factory forms ---
+  renderOutFactoryForms() {
+    if (!this.config.OUT_FACTORY_FORMS || this.config.OUT_FACTORY_FORMS.length === 0) {
+      this.dom.outFactoryContent.innerHTML = '<p>目前沒有廠外流程。</p>';
+      return;
+    }
+    
+    let html = '<div class="out-factory-grid">';
+    this.config.OUT_FACTORY_FORMS.forEach(formId => {
+      const formName = this.maintenanceData[formId] || formId;
+      html += `<button class="btn-secondary" data-form-id="${formId}">${formName}</button>`;
+    });
+    html += '</div>';
+    this.dom.outFactoryContent.innerHTML = html;
+
+    // Use Event Listeners instead of onclick
+    this.dom.outFactoryContent.querySelectorAll('.btn-secondary').forEach(button => {
+        button.addEventListener('click', (e) => {
+            this.showDirectForm(e.currentTarget.dataset.formId);
+        });
+    });
   },
 
   // --- Base function to render a form from the backend ---
@@ -296,13 +305,16 @@ const app = {
           <div class="form-container">${formHtml}</div>
           <div class="workflow-actions">
             <button type="submit" form="${formId}" class="btn-primary">提交表單</button>
-            ${context.backButton}
+            <button class="btn-secondary" id="back-button">${context.backButtonText}</button>
           </div>
         </div>`;
         
       const form = this.dom.workflowContainer.querySelector('form');
       form.addEventListener('submit', this.handleFormSubmit.bind(this));
       
+      // Use Event Listener for the back button
+      this.dom.workflowContainer.querySelector('#back-button').addEventListener('click', context.backButtonAction);
+
       this.populateDynamicFields(form, formId, this.state.currentFrameNumber);
       if (isEdit) {
         this.loadAndPopulateFormData(form, formId, this.state.currentFrameNumber);
@@ -314,6 +326,32 @@ const app = {
     } finally {
       this.hideLoader();
     }
+  },
+
+  // --- Shows a specific form ---
+  showForm(formId, frameNumber, isEdit = false) {
+    this.state.isEditMode = isEdit;
+    const formName = this.maintenanceData[formId] || formId;
+    const context = {
+      title: formName,
+      subtitle: `車架號碼: ${frameNumber}`,
+      backButtonText: '返回進度儀表板',
+      backButtonAction: () => this.fetchAndShowProgressDashboard(frameNumber)
+    };
+    this.showFormBase(formId, isEdit, context);
+  },
+  
+  // --- Shows a form that is not tied to a frame number ---
+  showDirectForm(formId) {
+    this.state.isEditMode = false; // These forms are typically for new entries
+    const formName = this.maintenanceData[formId] || formId;
+    const context = {
+        title: formName,
+        subtitle: '請填寫以下欄位',
+        backButtonText: '返回主畫面',
+        backButtonAction: () => this.goHome()
+    };
+    this.showFormBase(formId, false, context);
   },
 
   // --- Fetches form structure from the backend ---
