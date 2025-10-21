@@ -122,6 +122,7 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
 
 #frame-number-input {
     flex-grow: 1; /* Allows the input to take up available space */
+    width: auto; /* Override the default 100% width to allow flexbox to work */
 }
 
 .btn-icon {
