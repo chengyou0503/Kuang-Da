@@ -247,3 +247,84 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
   .admin-container { grid-template-columns: 1fr 1fr; }
   .admin-section.full-width { grid-column: 1 / -1; }
 }
+
+/* --- Dynamic Form Styling --- */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 0;
+}
+
+.form-group legend {
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 0 0.5rem;
+  margin-left: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-field:last-child {
+  margin-bottom: 0;
+}
+
+.form-field label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.radio-option input[type="radio"] {
+  width: auto;
+  margin-right: 0.75rem;
+}
+
+.radio-option label {
+  margin-bottom: 0;
+  font-weight: 400;
+}
+
+.image-preview {
+  max-width: 100%;
+  height: auto;
+  margin-top: 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.workflow-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.workflow-actions .btn-primary,
+.workflow-actions .btn-secondary {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .workflow-actions .btn-primary,
+  .workflow-actions .btn-secondary {
+    width: auto;
+    flex-grow: 1;
+  }
+}
