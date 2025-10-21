@@ -185,6 +185,9 @@ function doGet(e) {
     }));
 
     switch (action) {
+      case 'testDeployment':
+        result = { success: true, message: "Deployment is working correctly!" };
+        break;
       case 'getInitialPayload':
         result = getInitialPayload();
         break;
