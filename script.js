@@ -89,32 +89,57 @@ const app = {
     };
   },
 
-    // --- Initializes the application ---
-    init() {
-      this.cacheDomElements();
-      this.bindEvents(); // Manually bind 'this' for all event handlers
-      this.showLoader('正在初始化應用...');
-      
-      this.gasApi.run('getInitialPayload')
-        .then(response => {
-          if (response.success) {
-            const payload = response.data;
-            this.config = payload.config;
-            this.maintenanceData = payload.maintenanceData;
-            
-            // Forms are now lazy-loaded, no preload needed.
-            
-            this.setupEventListeners();
-            this.renderTabs();
-            this.loadPersistedData();
-            this.setActiveTab('in-factory');
-          } else {
-            this.handleError(response.message);
-          }
-        })
-        .catch(this.handleError.bind(this))
-        .finally(() => this.hideLoader());
-    },
+  // --- Initializes the application ---
+  init() {
+    this.cacheDomElements();
+    this.bindEvents(); // Manually bind 'this' for all event handlers
+    this.showLoader('正在初始化應用...');
+    
+    this.gasApi.run('getInitialPayload')
+      .then(response => {
+        if (response.success) {
+          const payload = response.data;
+          this.config = payload.config;
+          this.maintenanceData = payload.maintenanceData;
+          
+          this.preloadForms(); 
+          this.setupEventListeners();
+          this.renderTabs();
+          this.loadPersistedData();
+          this.setActiveTab('in-factory');
+        } else {
+          this.handleError(response.message);
+        }
+      })
+      .catch(this.handleError.bind(this))
+      .finally(() => this.hideLoader());
+  },
+
+  // --- Manually binds 'this' for all event handlers ---
+  bindEvents() {
+    this.startProcess = this.startProcess.bind(this);
+    this.toggleScanner = this.toggleScanner.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.goHome = this.goHome.bind(this);
+    this.showForm = this.showForm.bind(this);
+    this.showDirectForm = this.showDirectForm.bind(this);
+  },
+  
+  // --- Preloads all form HTML for instant access ---
+  async preloadForms() {
+    const allForms = [...this.config.IN_FACTORY_FORMS, ...this.config.OUT_FACTORY_FORMS];
+    for (const formId of allForms) {
+      try {
+        // Corrected path to fetch from the root forms directory
+        const response = await fetch(`forms/${formId}.html`);
+        if (!response.ok) throw new Error(`Form ${formId} not found at forms/${formId}.html`);
+        this.state.formCache[formId] = await response.text();
+      } catch (error) {
+        console.error(`Failed to preload form ${formId}:`, error);
+      }
+    }
+  },
+
   // --- Fetches form structure from the local cache ---
   fetchFormStructure(formId) {
     return new Promise((resolve, reject) => {
@@ -142,10 +167,10 @@ const app = {
 
   // --- Sets up all event listeners ---
   setupEventListeners() {
-    this.dom.startBtn.addEventListener('click', this.startProcess.bind(this));
-    this.dom.scanBtn.addEventListener('click', this.toggleScanner.bind(this));
+    this.dom.startBtn.addEventListener('click', this.startProcess);
+    this.dom.scanBtn.addEventListener('click', this.toggleScanner);
     this.dom.frameNumberInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') this.startProcess.bind(this)();
+      if (e.key === 'Enter') this.startProcess();
     });
     this.dom.tabsContainer.addEventListener('click', (e) => {
       if (e.target.classList.contains('tab')) {
