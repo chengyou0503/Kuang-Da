@@ -92,7 +92,6 @@ const app = {
   // --- Initializes the application ---
   init() {
     this.cacheDomElements();
-    this.bindEvents(); // Manually bind 'this' for all event handlers
     this.showLoader('正在初始化應用...');
     
     this.gasApi.run('getInitialPayload')
@@ -113,16 +112,6 @@ const app = {
       })
       .catch(this.handleError.bind(this))
       .finally(() => this.hideLoader());
-  },
-
-  // --- Manually binds 'this' for all event handlers ---
-  bindEvents() {
-    this.startProcess = this.startProcess.bind(this);
-    this.toggleScanner = this.toggleScanner.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.goHome = this.goHome.bind(this);
-    this.showForm = this.showForm.bind(this);
-    this.showDirectForm = this.showDirectForm.bind(this);
   },
   
   // --- Preloads all form HTML for instant access ---
@@ -167,10 +156,10 @@ const app = {
 
   // --- Sets up all event listeners ---
   setupEventListeners() {
-    this.dom.startBtn.addEventListener('click', this.startProcess);
-    this.dom.scanBtn.addEventListener('click', this.toggleScanner);
+    this.dom.startBtn.addEventListener('click', this.startProcess.bind(this));
+    this.dom.scanBtn.addEventListener('click', this.toggleScanner.bind(this));
     this.dom.frameNumberInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') this.startProcess();
+      if (e.key === 'Enter') this.startProcess.bind(this)();
     });
     this.dom.tabsContainer.addEventListener('click', (e) => {
       if (e.target.classList.contains('tab')) {
