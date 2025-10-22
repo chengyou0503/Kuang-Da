@@ -326,7 +326,7 @@ const app = {
     html += '</div>';
     this.dom.outFactoryContent.innerHTML = html;
 
-    // Use Event Listeners instead of onclick, ensuring 'this' context is correct
+    // CRITICAL FIX: Use Event Listeners instead of onclick
     this.dom.outFactoryContent.querySelectorAll('.btn-secondary').forEach(button => {
         button.addEventListener('click', (e) => {
             this.showDirectForm(e.currentTarget.dataset.formId);
@@ -338,46 +338,57 @@ const app = {
   async showFormBase(formId, isEdit, context) {
     try {
       this.showLoader(`正在載入表單...`);
-      
-      // Set a loading placeholder immediately
+
+      // 1. Set a loading placeholder for the whole container
       this.dom.workflowContainer.innerHTML = `
         <div class="content-card active">
           <div class="workflow-header">
             <h2>${context.title}</h2>
             <p>${context.subtitle} | 作業人員: <strong>${this.dom.userNameInput.value.trim()}</strong></p>
           </div>
-          <div class="form-container"><p>正在載入中...</p></div>
+          <div class="form-container"><p>正在載入表單結構...</p></div>
           <div class="workflow-actions">
             <button class="btn-secondary" id="back-button">${context.backButtonText}</button>
           </div>
         </div>`;
       this.dom.workflowContainer.querySelector('#back-button').addEventListener('click', context.backButtonAction);
 
+      // 2. Fetch the form HTML
       const formHtml = await this.fetchFormStructure(formId);
       if (!formHtml) throw new Error(`無法載入表單 ${formId} 的 HTML。`);
       
-      // Now, replace the placeholder with the actual form HTML
+      // 3. Inject the blank form HTML into the page
       const formContainer = this.dom.workflowContainer.querySelector('.form-container');
       formContainer.innerHTML = formHtml;
       
       const form = formContainer.querySelector('form');
       if (!form) throw new Error('在載入的 HTML 中找不到 <form> 元素。');
       
-      const submitButton = `<button type="submit" form="${form.id}" class="btn-primary">提交表單</button>`;
-      this.dom.workflowContainer.querySelector('.workflow-actions').insertAdjacentHTML('afterbegin', submitButton);
-
-      form.addEventListener('submit', this.handleFormSubmit.bind(this));
-      
+      // 4. Populate dynamic fields (like username, framenumber)
       this.populateDynamicFields(form, form.id, this.state.currentFrameNumber);
       
+      // 5. If in edit mode, NOW populate it with historical data
       if (isEdit) {
+        // Temporarily show a message inside the form
+        const originalHtml = formContainer.innerHTML;
         formContainer.innerHTML = `<p>正在載入歷史資料...</p>`;
-        await this.loadAndPopulateFormData(form, form.id, this.state.currentFrameNumber);
-        // After loading, re-insert the form HTML
-        formContainer.innerHTML = formHtml;
-        // And re-populate it
-        await this.loadAndPopulateFormData(form, form.id, this.state.currentFrameNumber);
+        try {
+          await this.loadAndPopulateFormData(form, form.id, this.state.currentFrameNumber);
+          // Restore the form's HTML structure after data is ready to be populated
+          formContainer.innerHTML = originalHtml;
+          // Re-run population on the now-visible form elements
+          await this.loadAndPopulateFormData(form, form.id, this.state.currentFrameNumber);
+        } catch (e) {
+          // If loading fails, still show the blank form
+          formContainer.innerHTML = originalHtml;
+          this.handleError(e);
+        }
       }
+      
+      // 6. Add submit button and event listener
+      const submitButton = `<button type="submit" form="${form.id}" class="btn-primary">提交表單</button>`;
+      this.dom.workflowContainer.querySelector('.workflow-actions').insertAdjacentHTML('afterbegin', submitButton);
+      form.addEventListener('submit', this.handleFormSubmit.bind(this));
       
       this.showScreen('workflow-container');
     } catch (error) {
