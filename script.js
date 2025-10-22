@@ -215,10 +215,19 @@ const app = {
     let html = '<div class="out-factory-grid">';
     this.config.OUT_FACTORY_FORMS.forEach(formId => {
       const formName = this.maintenanceData[formId] || formId;
-      html += `<button class="btn-secondary" onclick="app.showDirectForm('${formId}')">${formName}</button>`;
+      // Use data attributes instead of inline onclick
+      html += `<button class="btn-secondary" data-form-id="${formId}">${formName}</button>`;
     });
     html += '</div>';
     this.dom.outFactoryContent.innerHTML = html;
+
+    // Add event listeners after rendering the HTML
+    this.dom.outFactoryContent.querySelectorAll('.btn-secondary').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const formId = e.currentTarget.dataset.formId;
+        this.showDirectForm(formId);
+      });
+    });
   },
 
   // --- Loads persisted data from localStorage ---

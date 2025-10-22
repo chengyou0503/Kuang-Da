@@ -426,3 +426,15 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
   .admin-container { grid-template-columns: 1fr 1fr; }
   .admin-section.full-width { grid-column: 1 / -1; }
 }
+
+/* --- Styles for Out-of-Factory Buttons --- */
+.out-factory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.out-factory-grid .btn-secondary {
+  width: 100%; /* Ensure buttons fill the grid cell */
+}
