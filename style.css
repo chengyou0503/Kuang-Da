@@ -53,7 +53,7 @@ body {
 }
 
 
-.main-container { padding: 1rem; max-width: 800px; margin: 0 auto; }
+.main-container { padding: 1rem; max-width: 1200px; margin: 0 auto; }
 .admin-main-container { padding: 1rem; max-width: 1200px; margin: 0 auto; }
 .workflow-container { padding: 1rem; max-width: 1200px; margin: 0 auto; }
 
