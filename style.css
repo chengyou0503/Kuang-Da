@@ -463,6 +463,74 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
   }
 }
 
+/* --- Comprehensive RWD Styles (Mobile First) --- */
+@media (max-width: 768px) {
+  .main-container,
+  .admin-main-container,
+  .workflow-container {
+    padding: 0.5rem; /* Reduce padding on mobile */
+  }
+
+  .content-card {
+    padding: 1rem;
+  }
+
+  /* --- Table Stacking for Responsive Forms --- */
+  .form-table, .form-table thead, .form-table tbody, .form-table th, .form-table td, .form-table tr {
+    display: block;
+  }
+
+  .form-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .form-table tr {
+    border: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    padding: 0.5rem;
+  }
+
+  .form-table td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    text-align: right; /* Align content to the right */
+    display: flex; /* Use flexbox for better alignment */
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .form-table td:before {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    width: 45%;
+    padding-right: 1rem;
+    white-space: nowrap;
+    transform: translateY(-50%);
+    text-align: left;
+    font-weight: bold;
+    content: attr(data-label); /* Use data-label for headers */
+  }
+  
+  .form-table td:last-child {
+    border-bottom: 0;
+  }
+
+  .form-table .radio-group {
+    justify-content: flex-end; /* Align radio buttons to the right */
+    width: 100%;
+  }
+
+  .photo-row {
+    flex-direction: column;
+  }
+}
+
 /* --- New Table-Based Form Styles --- */
 .form-table-wrapper {
   overflow-x: auto; /* Add horizontal scroll on small screens */
