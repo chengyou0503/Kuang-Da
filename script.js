@@ -372,11 +372,10 @@ const app = {
           try {
             this.showLoader(`正在載入表單...`);
       
-            // 1. Fetch the form HTML first.
             const formHtml = await this.fetchFormStructure(formId);
             if (!formHtml) throw new Error(`無法載入表單 ${formId} 的 HTML。`);
       
-            // 2. Render the main structure with the form HTML inside.
+            // 1. Render the main structure WITHOUT the action buttons.
             this.dom.workflowContainer.innerHTML = `
               <div class="content-card active">
                 <div class="workflow-header">
@@ -384,31 +383,28 @@ const app = {
                   <p>${context.subtitle} | 作業人員: <strong>${this.dom.userNameInput.value.trim()}</strong></p>
                 </div>
                 <div class="form-container">${formHtml}</div>
-                <div class="workflow-actions">
-                  <button type="button" id="submit-form-btn" class="btn-primary">提交表單</button>
-                  <button class="btn-secondary" id="back-button">${context.backButtonText}</button>
-                </div>
               </div>`;
             
-            // 3. Now that the form is in the DOM, get a reference to it.
             const form = this.dom.workflowContainer.querySelector('form');
             if (!form) throw new Error('在載入的 HTML 中找不到 <form> 元素。');
             
-            // --- ROBUSTNESS FIX ---
-            // Ensure the form has the correct ID to link with the external submit button.
             form.id = formId;
-            // --- END FIX ---
-      
-            // 4. Attach event listeners directly to the buttons
-            const submitBtn = this.dom.workflowContainer.querySelector('#submit-form-btn');
-            submitBtn.addEventListener('click', () => this.handleFormSubmit(form));
 
+            // 2. Create the action buttons and append them INSIDE the form.
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'workflow-actions';
+            actionsDiv.innerHTML = `
+              <button type="submit" class="btn-primary">提交表單</button>
+              <button type="button" class="btn-secondary" id="back-button">${context.backButtonText}</button>
+            `;
+            form.appendChild(actionsDiv);
+      
+            // 3. Attach a 'submit' listener to the form - this is the correct way.
+            form.addEventListener('submit', this.handleFormSubmit);
             this.dom.workflowContainer.querySelector('#back-button').addEventListener('click', context.backButtonAction);
             
-            // 5. Populate dynamic fields (like username, framenumber).
             this.populateDynamicFields(form, form.id, this.state.currentFrameNumber);
             
-            // 6. If in edit mode, NOW populate it with historical data.
             if (isEdit) {
               await this.loadAndPopulateFormData(form, form.id, this.state.currentFrameNumber);
             }
@@ -472,7 +468,9 @@ const app = {
   },
 
   // --- Handles form submission ---
-  async handleFormSubmit(form) {
+  async handleFormSubmit(event) {
+    event.preventDefault(); // Prevent default browser submission
+    const form = event.target; // Get the form from the event
     this.showLoader('正在提交資料...');
 
     // --- DEEPER DEBUGGING ---
