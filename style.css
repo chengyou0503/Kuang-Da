@@ -248,17 +248,31 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
   .admin-section.full-width { grid-column: 1 / -1; }
 }
 
-/* --- Dynamic Form Styling (Refined) --- */
+/* --- Out-of-Factory Workflow Grid --- */
+.out-factory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.out-factory-grid .btn-secondary {
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem 1rem;
+  font-size: 1rem;
+}
+
+/* --- UNIFIED & REFINED DYNAMIC FORM STYLING --- */
 .form-container {
   display: flex;
   flex-direction: column;
-  gap: 2rem; /* Increased gap for more breathing room */
+  gap: 1.5rem;
 }
 
 .form-group {
-  background-color: #f8f9fa; /* Subtle background for grouping */
+  background-color: var(--secondary-color);
   border: 1px solid var(--border-color);
-  border-radius: 12px; /* Softer corners */
+  border-radius: 12px;
   padding: 1.5rem;
   margin: 0;
 }
@@ -267,14 +281,14 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
   font-weight: 600;
   font-size: 1.1rem;
   padding: 0 0.5rem;
-  margin-left: 0.5rem; /* Adjusted margin */
+  margin-left: 0.5rem;
   color: var(--primary-color);
 }
 
 .form-field {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.25rem; /* Increased bottom margin */
+  margin-bottom: 1.25rem;
 }
 
 .form-field:last-child {
@@ -283,10 +297,11 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
 
 .form-field label {
   font-weight: 500;
-  margin-bottom: 0.6rem; /* Increased space between label and input */
+  margin-bottom: 0.6rem;
   color: var(--text-color);
 }
 
+/* Refined Radio Buttons */
 .radio-option {
   display: flex;
   align-items: center;
@@ -299,32 +314,37 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
   transition: all 0.2s ease;
 }
 
-.radio-option:hover {
+.radio-option:hover, .radio-option:focus-within {
   background-color: #e9ecef;
-  border-color: #adb5bd;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.1);
 }
 
 .radio-option input[type="radio"] {
   width: auto;
   margin-right: 0.75rem;
-  /* Custom radio button style can be added here if desired */
+  flex-shrink: 0;
 }
 
 .radio-option label {
   margin-bottom: 0;
   font-weight: 400;
-  flex-grow: 1; /* Make label take up space */
+  flex-grow: 1;
 }
 
+/* Image Preview Styling */
 .image-preview {
   max-width: 100%;
   height: auto;
   margin-top: 1rem;
-  border-radius: 8px; /* Softer corners */
-  border: 2px dashed var(--border-color); /* Dashed border for placeholder feel */
+  border-radius: 8px;
+  border: 2px dashed var(--border-color);
   padding: 0.5rem;
+  object-fit: contain; /* Ensures the image is never cut off */
+  background-color: var(--secondary-color);
 }
 
+/* --- Workflow Actions & Buttons --- */
 .workflow-actions {
   display: flex;
   gap: 1rem;
