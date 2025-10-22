@@ -89,72 +89,7 @@ function getInitialPayload() {
       },
       maintenanceData: getMaintenanceData_() // Assuming this is still needed for something
     }
-function processFormSubmit(formData) {
-  const sheet = SpreadsheetApp.openById(CONFIG.SHEET_ID).getSheetByName(CONFIG.SHEET_NAME);
-  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
-  
-  const formId = formData.formId;
-  // CRITICAL FIX: Use the correct key to get the frame number
-  const frameNumber = formData.車架號碼; 
-  
-  if (!frameNumber || !formId) {
-    throw new Error("提交的資料中缺少 '車架號碼' 或 'formId'");
-  }
-
-  const PHOTO_UPLOAD_FOLDER_ID = "1-2Xb_doEh21p-x2d227FkOFL-3-QzAbp"; // Change to your target folder
-
-  // Handle photo uploads
-  for (const key in formData) {
-    if (key.startsWith('photoData') && formData[key] && formData[key].startsWith('data:image')) {
-      try {
-        const [meta, base64Data] = formData[key].split(',');
-        const mimeType = meta.match(/:(.*?);/)[1];
-        const fileExtension = mimeType.split('/')[1] || 'jpg';
-        const decodedBlob = Utilities.newBlob(Utilities.base64Decode(base64Data), mimeType, `${frameNumber}_${formId}_${key}.${fileExtension}`);
-        
-        const parentFolder = DriveApp.getFolderById(PHOTO_UPLOAD_FOLDER_ID);
-        const imageFile = parentFolder.createFile(decodedBlob);
-        formData[key] = imageFile.getUrl(); // Replace base64 with URL
-      } catch (e) {
-        Logger.log(`Error processing image ${key} for ${frameNumber}: ${e.toString()}`);
-        formData[key] = `上傳失敗: ${e.message}`;
-      }
-    }
-  }
-
-  // Prepare the data for sheet update
-  const updates = {};
-  for (const key in formData) {
-    if (key !== 'formId') {
-      // The full key name (e.g., KD03_Item1_1) is now expected from the form
-      updates[key] = formData[key];
-    }
-  }
-  updates[`${formId}_完成`] = new Date();
-  updates[`${formId}_作業人員`] = formData.userName; // Assuming userName is passed
-  updates[`${formId}_日期`] = new Date();
-
-  // Find row or create new one
-  const data = sheet.getDataRange().getValues();
-  data.shift(); // remove headers
-  const frameNumberIndex = headers.indexOf('車架號碼');
-  let rowIndex = data.findIndex(row => String(row[frameNumberIndex]).trim().toUpperCase() === String(frameNumber).trim().toUpperCase());
-
-  if (rowIndex === -1) {
-    const newRowValues = new Array(headers.length).fill('');
-    newRowValues[frameNumberIndex] = frameNumber;
-    for (const headerName in updates) {
-      const colIndex = headers.indexOf(headerName);
-      if (colIndex !== -1) { newRowValues[colIndex] = updates[headerName]; }
-    }
-    sheet.appendRow(newRowValues);
-  } else {
-    const rowNumber = rowIndex + 2; // +1 for 1-based index, +1 for header row
-    updateSheetRow(sheet, rowNumber, headers, updates);
-  }
-
-  SCRIPT_CACHE.remove(`sheetData_${CONFIG.SHEET_ID}`); // Invalidate cache
-  return { success: true, message: `${CONFIG.FORM_NAMES[formId]} (${frameNumber}) 資料已儲存` };
+  };
 }
 
 function getVehicleProgress(frameNumber) {
