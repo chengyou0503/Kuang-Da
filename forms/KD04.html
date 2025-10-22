@@ -1,162 +1,169 @@
 <form id="KD04">
   <fieldset class="form-group">
-    <legend>檢查項目</legend>
+    <legend>車身組裝後查核</legend>
     <div class="form-field">
-      <label>1. 車架是否損傷</label>
+      <label>1. 是否確實執行打造後清理工作，避免電銲渣、垃圾板金顆粒…等殘留在車上。</label>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item1_yes" name="KD04_Item1" value="是" required>
-        <label for="KD04_Item1_yes">是</label>
+        <input type="radio" id="KD04_Cleanliness_yes" name="KD04_Cleanliness" value="是" required>
+        <label for="KD04_Cleanliness_yes">是</label>
       </div>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item1_no" name="KD04_Item1" value="否">
-        <label for="KD04_Item1_no">否</label>
+        <input type="radio" id="KD04_Cleanliness_no" name="KD04_Cleanliness" value="否">
+        <label for="KD04_Cleanliness_no">否</label>
       </div>
     </div>
     <div class="form-field">
-      <label>2. 車身外殼是否損傷</label>
+      <label>2. 檢查轉向系統是否運行無阻。</label>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item2_yes" name="KD04_Item2" value="是" required>
-        <label for="KD04_Item2_yes">是</label>
+        <input type="radio" id="KD04_Steering_yes" name="KD04_Steering" value="是" required>
+        <label for="KD04_Steering_yes">是</label>
       </div>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item2_no" name="KD04_Item2" value="否">
-        <label for="KD04_Item2_no">否</label>
-      </div>
-    </div>
-    <div class="form-field">
-      <label>3. 煞車拉桿功能</label>
-      <div class="radio-option">
-        <input type="radio" id="KD04_Item3_ok" name="KD04_Item3" value="正常" required>
-        <label for="KD04_Item3_ok">正常</label>
-      </div>
-      <div class="radio-option">
-        <input type="radio" id="KD04_Item3_fail" name="KD04_Item3" value="異常">
-        <label for="KD04_Item3_fail">異常</label>
+        <input type="radio" id="KD04_Steering_no" name="KD04_Steering" value="否">
+        <label for="KD04_Steering_no">否</label>
       </div>
     </div>
     <div class="form-field">
-      <label>4. 煞車油量</label>
+      <label>3. 胎壓充氣是否正常。</label>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item4_ok" name="KD04_Item4" value="足夠" required>
-        <label for="KD04_Item4_ok">足夠</label>
+        <input type="radio" id="KD04_TirePressure_ok" name="KD04_TirePressure" value="正常" required>
+        <label for="KD04_TirePressure_ok">正常</label>
       </div>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item4_fail" name="KD04_Item4" value="不足">
-        <label for="KD04_Item4_fail">不足</label>
-      </div>
-    </div>
-    <div class="form-field">
-      <label>5. 輪胎壓力</label>
-      <div class="radio-option">
-        <input type="radio" id="KD04_Item5_ok" name="KD04_Item5" value="正常" required>
-        <label for="KD04_Item5_ok">正常</label>
-      </div>
-      <div class="radio-option">
-        <input type="radio" id="KD04_Item5_fail" name="KD04_Item5" value="異常">
-        <label for="KD04_Item5_fail">異常</label>
+        <input type="radio" id="KD04_TirePressure_fail" name="KD04_TirePressure" value="異常">
+        <label for="KD04_TirePressure_fail">異常</label>
       </div>
     </div>
     <div class="form-field">
-      <label>6. 儀表功能</label>
+      <label>4. 試車：是否無震動、異音。</label>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item6_ok" name="KD04_Item6" value="正常" required>
-        <label for="KD04_Item6_ok">正常</label>
+        <input type="radio" id="KD04_TestDrive_yes" name="KD04_TestDrive" value="是" required>
+        <label for="KD04_TestDrive_yes">是</label>
       </div>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item6_fail" name="KD04_Item6" value="異常">
-        <label for="KD04_Item6_fail">異常</label>
-      </div>
-    </div>
-    <div class="form-field">
-      <label>7. 大燈功能</label>
-      <div class="radio-option">
-        <input type="radio" id="KD04_Item7_ok" name="KD04_Item7" value="正常" required>
-        <label for="KD04_Item7_ok">正常</label>
-      </div>
-      <div class="radio-option">
-        <input type="radio" id="KD04_Item7_fail" name="KD04_Item7" value="異常">
-        <label for="KD04_Item7_fail">異常</label>
+        <input type="radio" id="KD04_TestDrive_no" name="KD04_TestDrive" value="否">
+        <label for="KD04_TestDrive_no">否</label>
       </div>
     </div>
     <div class="form-field">
-      <label>8. 方向燈功能</label>
+      <label>5. 懸吊（避震）系統減震是否良好。</label>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item8_ok" name="KD04_Item8" value="正常" required>
-        <label for="KD04_Item8_ok">正常</label>
+        <input type="radio" id="KD04_Suspension_yes" name="KD04_Suspension" value="是" required>
+        <label for="KD04_Suspension_yes">是</label>
       </div>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item8_fail" name="KD04_Item8" value="異常">
-        <label for="KD04_Item8_fail">異常</label>
-      </div>
-    </div>
-    <div class="form-field">
-      <label>9. 喇叭功能</label>
-      <div class="radio-option">
-        <input type="radio" id="KD04_Item9_ok" name="KD04_Item9" value="正常" required>
-        <label for="KD04_Item9_ok">正常</label>
-      </div>
-      <div class="radio-option">
-        <input type="radio" id="KD04_Item9_fail" name="KD04_Item9" value="異常">
-        <label for="KD04_Item9_fail">異常</label>
+        <input type="radio" id="KD04_Suspension_no" name="KD04_Suspension" value="否">
+        <label for="KD04_Suspension_no">否</label>
       </div>
     </div>
     <div class="form-field">
-      <label>10. 電子倒車功能</label>
+      <label>6. 煞車系統功能是否正常。</label>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item10_ok" name="KD04_Item10" value="正常" required>
-        <label for="KD04_Item10_ok">正常</label>
+        <input type="radio" id="KD04_Brakes_ok" name="KD04_Brakes" value="正常" required>
+        <label for="KD04_Brakes_ok">正常</label>
       </div>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item10_fail" name="KD04_Item10" value="異常">
-        <label for="KD04_Item10_fail">異常</label>
-      </div>
-    </div>
-    <div class="form-field">
-      <label>11. 電子駐車功能</label>
-      <div class="radio-option">
-        <input type="radio" id="KD04_Item11_ok" name="KD04_Item11" value="正常" required>
-        <label for="KD04_Item11_ok">正常</label>
-      </div>
-      <div class="radio-option">
-        <input type="radio" id="KD04_Item11_fail" name="KD04_Item11" value="異常">
-        <label for="KD04_Item11_fail">異常</label>
+        <input type="radio" id="KD04_Brakes_fail" name="KD04_Brakes" value="異常">
+        <label for="KD04_Brakes_fail">異常</label>
       </div>
     </div>
     <div class="form-field">
-      <label>12. 電子加力功能</label>
+      <label>7. 大燈功能動作是否正常。</label>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item12_ok" name="KD04_Item12" value="正常" required>
-        <label for="KD04_Item12_ok">正常</label>
+        <input type="radio" id="KD04_Headlight_ok" name="KD04_Headlight" value="正常" required>
+        <label for="KD04_Headlight_ok">正常</label>
       </div>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item12_fail" name="KD04_Item12" value="異常">
-        <label for="KD04_Item12_fail">異常</label>
-      </div>
-    </div>
-    <div class="form-field">
-      <label for="KD04_Item13">13. 電池電壓</label>
-      <input type="text" id="KD04_Item13" name="KD04_Item13" required>
-    </div>
-    <div class="form-field">
-      <label>14. 控制器功能</label>
-      <div class="radio-option">
-        <input type="radio" id="KD04_Item14_ok" name="KD04_Item14" value="正常" required>
-        <label for="KD04_Item14_ok">正常</label>
-      </div>
-      <div class="radio-option">
-        <input type="radio" id="KD04_Item14_fail" name="KD04_Item14" value="異常">
-        <label for="KD04_Item14_fail">異常</label>
+        <input type="radio" id="KD04_Headlight_fail" name="KD04_Headlight" value="異常">
+        <label for="KD04_Headlight_fail">異常</label>
       </div>
     </div>
     <div class="form-field">
-      <label>15. 馬達功能</label>
+      <label>8. 方向燈、車寬燈功能動作是否正常。</label>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item15_ok" name="KD04_Item15" value="正常" required>
-        <label for="KD04_Item15_ok">正常</label>
+        <input type="radio" id="KD04_TurnSignal_ok" name="KD04_TurnSignal" value="正常" required>
+        <label for="KD04_TurnSignal_ok">正常</label>
       </div>
       <div class="radio-option">
-        <input type="radio" id="KD04_Item15_fail" name="KD04_Item15" value="異常">
-        <label for="KD04_Item15_fail">異常</label>
+        <input type="radio" id="KD04_TurnSignal_fail" name="KD04_TurnSignal" value="異常">
+        <label for="KD04_TurnSignal_fail">異常</label>
+      </div>
+    </div>
+    <div class="form-field">
+      <label>9. 尾燈、煞車燈功能動作是否正常。</label>
+      <div class="radio-option">
+        <input type="radio" id="KD04_Taillight_ok" name="KD04_Taillight" value="正常" required>
+        <label for="KD04_Taillight_ok">正常</label>
+      </div>
+      <div class="radio-option">
+        <input type="radio" id="KD04_Taillight_fail" name="KD04_Taillight" value="異常">
+        <label for="KD04_Taillight_fail">異常</label>
+      </div>
+    </div>
+    <div class="form-field">
+      <label>10. 電線的安裝：電線是否遠離高溫之組件，是否固定良好。</label>
+      <div class="radio-option">
+        <input type="radio" id="KD04_Wiring_yes" name="KD04_Wiring" value="是" required>
+        <label for="KD04_Wiring_yes">是</label>
+      </div>
+      <div class="radio-option">
+        <input type="radio" id="KD04_Wiring_no" name="KD04_Wiring" value="否">
+        <label for="KD04_Wiring_no">否</label>
+      </div>
+    </div>
+    <div class="form-field">
+      <label>11. 檢查電瓶開關是否連接正確。</label>
+      <div class="radio-option">
+        <input type="radio" id="KD04_BatterySwitch_yes" name="KD04_BatterySwitch" value="是" required>
+        <label for="KD04_BatterySwitch_yes">是</label>
+      </div>
+      <div class="radio-option">
+        <input type="radio" id="KD04_BatterySwitch_no" name="KD04_BatterySwitch" value="否">
+        <label for="KD04_BatterySwitch_no">否</label>
+      </div>
+    </div>
+    <div class="form-field">
+      <label>12. 隔熱材料安裝是否穩固，管線是否無接近高熱機件。</label>
+      <div class="radio-option">
+        <input type="radio" id="KD04_Insulation_yes" name="KD04_Insulation" value="是" required>
+        <label for="KD04_Insulation_yes">是</label>
+      </div>
+      <div class="radio-option">
+        <input type="radio" id="KD04_Insulation_no" name="KD04_Insulation" value="否">
+        <label for="KD04_Insulation_no">否</label>
+      </div>
+    </div>
+    <div class="form-field">
+      <label>13. 電池系統通風是否良好，接點是否牢固；不可有線頭疊接枝現象，接點是否確實穩固，線路距離元件是否有適當距離，開關固定是否良好，電瓶線連接是否良好。</label>
+      <div class="radio-option">
+        <input type="radio" id="KD04_BatterySystem_yes" name="KD04_BatterySystem" value="是" required>
+        <label for="KD04_BatterySystem_yes">是</label>
+      </div>
+      <div class="radio-option">
+        <input type="radio" id="KD04_BatterySystem_no" name="KD04_BatterySystem" value="否">
+        <label for="KD04_BatterySystem_no">否</label>
+      </div>
+    </div>
+    <div class="form-field">
+      <label>14. 審驗合格標章黏貼（含懸掛）預留位置是否正確。</label>
+      <div class="radio-option">
+        <input type="radio" id="KD04_TagPosition_yes" name="KD04_TagPosition" value="是" required>
+        <label for="KD04_TagPosition_yes">是</label>
+      </div>
+      <div class="radio-option">
+        <input type="radio" id="KD04_TagPosition_no" name="KD04_TagPosition" value="否">
+        <label for="KD04_TagPosition_no">否</label>
+      </div>
+    </div>
+    <div class="form-field">
+      <label>15. 車架號碼是否正確及清晰。</label>
+      <div class="radio-option">
+        <input type="radio" id="KD04_FrameNumber_yes" name="KD04_FrameNumber" value="是" required>
+        <label for="KD04_FrameNumber_yes">是</label>
+      </div>
+      <div class="radio-option">
+        <input type="radio" id="KD04_FrameNumber_no" name="KD04_FrameNumber" value="否">
+        <label for="KD04_FrameNumber_no">否</label>
       </div>
     </div>
   </fieldset>
