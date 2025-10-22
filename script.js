@@ -61,6 +61,7 @@ const app = {
     qrScanner: null,
     isEditMode: false,
     formCache: {}, // Cache for preloaded form HTML
+    vehicleProgressCache: {}, // Cache for vehicle progress data
   },
 
   // --- DOM Element Cache ---
@@ -243,11 +244,18 @@ const app = {
   },
 
   // --- Fetches and displays the progress dashboard ---
-  fetchAndShowProgressDashboard(frameNumber) {
+  fetchAndShowProgressDashboard(frameNumber, forceRefresh = false) {
+    if (!forceRefresh && this.state.vehicleProgressCache[frameNumber]) {
+      this.renderProgressDashboard(this.state.vehicleProgressCache[frameNumber]);
+      this.showScreen('workflow-container');
+      return;
+    }
+
     this.showLoader('正在查詢車輛進度...');
     this.gasApi.run('getVehicleProgress', { frameNumber })
       .then(response => {
         if (response.success) {
+          this.state.vehicleProgressCache[frameNumber] = response.data; // Cache the new data
           this.renderProgressDashboard(response.data);
           this.showScreen('workflow-container');
         } else {
@@ -423,11 +431,10 @@ const app = {
         },
   // --- Loads and populates a form with existing data ---
   loadAndPopulateFormData(form, formId, frameNumber) {
-    // Return a promise to allow async/await
     return new Promise((resolve, reject) => {
       this.gasApi.run('getFormResponseData', { formId, frameNumber })
         .then(response => {
-          if (response.success && response.data) {
+          if (response.success && response.data && Object.keys(response.data).length > 0) {
             const formData = response.data;
             for (const key in formData) {
               const nameToFind = key.startsWith(formId + '_') ? key.substring(formId.length + 1) : key;
@@ -459,17 +466,18 @@ const app = {
                 }
               }
             }
-            resolve(); // Resolve the promise on success
-          } else if (!response.success) {
-            this.showNotification(`無法載入資料: ${response.message}`, 'error');
-            reject(new Error(response.message)); // Reject on API error
+            resolve();
+          } else if (response.success) {
+            this.showNotification('查無先前的表單紀錄。', 'success');
+            resolve(); // No data is not an error, just resolve.
           } else {
-            resolve(); // Resolve even if there's no data
+            this.showNotification(`無法載入資料: ${response.message}`, 'error');
+            reject(new Error(response.message));
           }
         })
         .catch(err => {
           this.handleError(err);
-          reject(err); // Reject on network or other errors
+          reject(err);
         });
     });
   },
@@ -540,18 +548,41 @@ const app = {
 
   // --- Submits data to the server ---
   submitDataToServer(dataObject) {
-    console.log('Submitting data:', dataObject); // <-- DEBUGGING LINE
     this.showLoader('正在儲存資料...');
-    // CRITICAL FIX: The backend expects the data to be in a parameter named 'formData'
     this.gasApi.run('processFormSubmit', { formData: JSON.stringify(dataObject) })
-      .then(response => {
+      .then(async (response) => {
         if (response.success) {
           this.showNotification('資料提交成功！', 'success');
-          // CRITICAL FIX: Always return to the progress dashboard for in-factory forms
+          
+          // Clear the cache for this vehicle to force a refresh
+          delete this.state.vehicleProgressCache[this.state.currentFrameNumber];
+
           if (this.config.IN_FACTORY_FORMS.includes(dataObject.formId)) {
-            this.fetchAndShowProgressDashboard(this.state.currentFrameNumber);
+            const progressResponse = await this.gasApi.run('getVehicleProgress', { frameNumber: this.state.currentFrameNumber });
+            if (progressResponse.success) {
+              this.state.vehicleProgressCache[this.state.currentFrameNumber] = progressResponse.data; // Update cache
+              const progress = progressResponse.data.progress || {};
+              const completedForms = Object.keys(progress).filter(key => progress[key] === true).map(id => String(id).trim().toUpperCase());
+              
+              let nextForm = null;
+              for (const formId of this.config.IN_FACTORY_FORMS) {
+                if (!completedForms.includes(String(formId).trim().toUpperCase())) {
+                  nextForm = formId;
+                  break;
+                }
+              }
+
+              if (nextForm) {
+                this.showNotification(`自動載入下一個表單: ${this.maintenanceData[nextForm] || nextForm}`, 'success');
+                this.showForm(nextForm, this.state.currentFrameNumber, false);
+              } else {
+                this.showNotification('所有廠內流程已完成！', 'success');
+                this.fetchAndShowProgressDashboard(this.state.currentFrameNumber, true); // Force refresh
+              }
+            } else {
+              this.fetchAndShowProgressDashboard(this.state.currentFrameNumber, true); // Force refresh
+            }
           } else {
-            // For out-of-factory forms, simply go back home as they don't have a "progress" view.
             this.goHome();
           }
         } else {

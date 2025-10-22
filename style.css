@@ -338,7 +338,88 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
 #notification.error { background-color: var(--error-color); }
 
 /* --- RWD Media Queries --- */
-@media (min-width: 768px) {
+@media (max-width: 768px) {
+  .main-container, .workflow-container, .admin-main-container {
+    padding: 0.75rem;
+  }
+
+  .content-card {
+    padding: 1rem;
+  }
+
+  .app-header h1 {
+    font-size: 1.1rem;
+  }
+
+  .progress-stepper {
+    flex-direction: column;
+  }
+
+  .btn-primary, .btn-secondary {
+    width: 100%; /* Make buttons full-width on mobile */
+  }
+
+  .admin-container {
+    grid-template-columns: 1fr; /* Stack admin sections vertically */
+  }
+
+  /* Responsive table styles */
+  .form-table-wrapper {
+    border-radius: 8px;
+  }
+
+  .form-table thead {
+    display: none; /* Hide table headers on mobile */
+  }
+
+  .form-table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  
+  .form-table tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .form-table td {
+    display: block;
+    text-align: right;
+    border-bottom: 1px dotted var(--border-color);
+    padding: 0.75rem 0;
+    position: relative;
+  }
+  
+  .form-table td:last-child {
+    border-bottom: none;
+  }
+
+  .form-table td[data-label]::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .form-table .radio-group {
+    justify-content: flex-end;
+    padding-top: 0.5rem;
+  }
+  
+  .form-table .form-question-text {
+    text-align: left;
+    font-weight: bold;
+    padding: 0.75rem 0;
+  }
+  
+  .form-table .form-question-text::before {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
   .main-container { padding: 2rem; }
   .content-card { padding: 2rem; }
   .btn-primary, .btn-secondary { width: auto; }
@@ -346,179 +427,3 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
   .admin-section.full-width { grid-column: 1 / -1; }
 }
 
-/* --- UNIFIED, REFINED & FULLY RESPONSIVE FORM STYLING --- */
-.form-table-wrapper {
-  overflow-x: auto;
-  margin-top: 1.5rem;
-}
-
-.form-table {
-  width: 100%;
-  border-collapse: separate; /* Use separate for border-radius */
-  border-spacing: 0;
-  font-size: 1rem;
-}
-
-.form-table th,
-.form-table td {
-  border: 1px solid var(--border-color);
-  padding: 0.8rem 1rem;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.form-table th,
-.form-table .group-header {
-  background-color: #e9ecef;
-  font-weight: 600;
-  text-align: center;
-}
-
-.form-table .form-question-text {
-  text-align: left;
-}
-
-.form-table .radio-group {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.form-table .radio-group label {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  gap: 0.5rem;
-}
-
-.form-table input[type="text"] {
-  width: 98%;
-  padding: 0.5rem;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-}
-
-/* --- Comprehensive RWD Styles (Mobile First) --- */
-@media (max-width: 768px) {
-  .form-table, 
-  .form-table thead, 
-  .form-table tbody, 
-  .form-table th, 
-  .form-table td, 
-  .form-table tr {
-    display: block;
-  }
-
-  .form-table thead tr,
-  .form-table .group-header-row {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-  }
-
-  .form-table tr {
-    border: 1px solid var(--border-color);
-    margin-bottom: 1rem;
-    border-radius: 8px;
-    padding: 1rem;
-  }
-  
-  .form-table td {
-    border: none;
-    border-bottom: 1px solid #eee;
-    position: relative;
-    padding-left: 1rem; /* Reset padding */
-    text-align: right;
-    display: block; /* Stack content vertically */
-  }
-  
-  .form-table td:before {
-    content: attr(data-label);
-    position: relative;
-    display: block;
-    font-weight: bold;
-    text-align: left;
-    margin-bottom: 0.5rem;
-  }
-
-  .form-table td:last-child {
-    border-bottom: 0;
-  }
-
-  .form-table .radio-group {
-    justify-content: flex-start; /* Align radios to the left on mobile */
-    padding-top: 0.5rem;
-  }
-
-  .form-table .form-question-text {
-    padding-left: 1rem; /* Ensure consistent padding */
-    text-align: left;
-  }
-
-  .form-table .form-question-text:before {
-    display: none; /* Hide pseudo-label for the main question cell */
-  }
-}
-
-
-/* --- RWD Styles for Horizontal Scrolling --- */
-@media (max-width: 768px) {
-  .main-container,
-  .admin-main-container,
-  .workflow-container {
-    padding: 0.5rem; /* Reduce padding on mobile */
-  }
-
-  .content-card {
-    padding: 1rem;
-  }
-
-  .form-table {
-    font-size: 0.9rem; /* Slightly smaller font on mobile */
-  }
-
-  .form-table th,
-  .form-table td {
-    padding: 0.6rem 0.8rem; /* Adjust cell padding */
-  }
-}
-
-/* --- New Table-Based Form Styles --- */
-.form-table-wrapper {
-  overflow-x: auto; /* Add horizontal scroll on small screens */
-}
-
-.form-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  font-size: 0.9rem;
-}
-
-.form-table th,
-.form-table td {
-  border: 1px solid var(--border-color);
-  padding: 0.75rem;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.form-table th {
-  background-color: var(--secondary-color);
-  font-weight: 600;
-}
-
-.form-table input[type="text"],
-.form-table input[type="radio"],
-.form-table input[type="checkbox"] {
-  margin: 0;
-}
-
-.form-table input[type="text"] {
-  width: 95%;
-}
-
-.form-table td[data-label="項目"] {
-  text-align: left;
-}
