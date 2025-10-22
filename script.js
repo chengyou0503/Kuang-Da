@@ -1,3 +1,4 @@
+/* global Html5Qrcode */
 const app = {
   // --- API Client for Google Apps Script ---
   gasApi: {
@@ -352,20 +353,12 @@ const app = {
           const formContainer = this.dom.workflowContainer.querySelector('.form-container');
           let html = formContainer.innerHTML;
       
-          const vehicleModel = "Your Vehicle Model"; // You might want to get this from somewhere
           const updateTime = new Date().toLocaleString('sv-SE'); // YYYY-MM-DD HH:MM:SS
       
           html = html.replace(/{{車架號碼}}/g, frameNumber || '');
           html = html.replace(new RegExp(`{{${formId}_更新時間}}`, 'g'), updateTime);
           
           formContainer.innerHTML = html;
-      
-          // Also populate hidden fields
-          const frameNumberInput = form.querySelector('input[name="車架號碼"]');
-          if (frameNumberInput) frameNumberInput.value = frameNumber;
-      
-          const modelInput = form.querySelector('input[name="車輛型號"]');
-          if (modelInput) modelInput.value = vehicleModel;
         },    
         async showFormBase(formId, isEdit, context) {
           try {
@@ -393,6 +386,16 @@ const app = {
             if (!form) throw new Error('在載入的 HTML 中找不到 <form> 元素。');
             
             form.id = formId;
+
+            // Populate hidden or dynamic input fields now that we have a valid form reference
+            const frameNumber = this.state.currentFrameNumber;
+            if (frameNumber) {
+                const frameNumberInput = form.querySelector('input[name="車架號碼"]');
+                if (frameNumberInput) frameNumberInput.value = frameNumber;
+            }
+            const vehicleModel = "Your Vehicle Model"; // Placeholder for model
+            const modelInput = form.querySelector('input[name="車輛型號"]');
+            if (modelInput) modelInput.value = vehicleModel;
 
             // 4. Create action buttons and append them INSIDE the form.
             const actionsDiv = document.createElement('div');
@@ -432,14 +435,15 @@ const app = {
               
               if (element) {
                 switch (element.type) {
-                  case 'radio':
+                  case 'radio': {
                     const radioToSelect = form.querySelector(`[name="${nameToFind}"][value="${formData[key]}"]`);
                     if (radioToSelect) radioToSelect.checked = true;
                     break;
+                  }
                   case 'checkbox':
                     element.checked = (formData[key] === true || formData[key] === 'true');
                     break;
-                  case 'file':
+                  case 'file': {
                     if (typeof formData[key] === 'string' && formData[key].startsWith('http')) {
                       const preview = document.getElementById(`${form.id}_${nameToFind}_preview`);
                       if(preview) {
@@ -448,6 +452,7 @@ const app = {
                       }
                     }
                     break;
+                  }
                   default:
                     element.value = formData[key];
                     break;
@@ -578,8 +583,8 @@ const app = {
           this.toggleScanner();
           this.startProcess();
         },
-        (errorMessage) => { /* Ignore partial scans */ }
-      ).catch(err => {
+        () => { /* Ignore partial scans */ }
+      ).catch(() => {
         this.handleError('無法啟動相機，請檢查權限。');
         qrReaderElement.style.display = 'none';
       });
@@ -650,19 +655,5 @@ const app = {
     });
   }
 };
-
-// --- Global function for image preview ---
-function previewImage(event, previewId) {
-  const preview = document.getElementById(previewId);
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      preview.src = e.target.result;
-      preview.style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-  }
-}
 
 document.addEventListener('DOMContentLoaded', () => app.init());
