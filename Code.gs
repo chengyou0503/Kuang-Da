@@ -89,18 +89,16 @@ function getInitialPayload() {
       },
       maintenanceData: getMaintenanceData_() // Assuming this is still needed for something
     }
-  };
-}
-
 function processFormSubmit(formData) {
   const sheet = SpreadsheetApp.openById(CONFIG.SHEET_ID).getSheetByName(CONFIG.SHEET_NAME);
   const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
   
   const formId = formData.formId;
-  const frameNumber = formData.frameNumber; // Assuming frameNumber is always a field in the form
+  // CRITICAL FIX: Use the correct key to get the frame number
+  const frameNumber = formData.車架號碼; 
   
   if (!frameNumber || !formId) {
-    throw new Error("提交的資料中缺少 'frameNumber' 或 'formId'");
+    throw new Error("提交的資料中缺少 '車架號碼' 或 'formId'");
   }
 
   const PHOTO_UPLOAD_FOLDER_ID = "1-2Xb_doEh21p-x2d227FkOFL-3-QzAbp"; // Change to your target folder

@@ -495,13 +495,17 @@ const app = {
 
   // --- Submits data to the server ---
   submitDataToServer(dataObject) {
-    this.gasApi.run('processFormSubmit', { formData: dataObject }) // FIX: Changed action to 'processFormSubmit' and wrapped data
+    this.showLoader('正在儲存資料...');
+    // CRITICAL FIX: The backend expects the data to be in a parameter named 'formData'
+    this.gasApi.run('processFormSubmit', { formData: JSON.stringify(dataObject) })
       .then(response => {
         if (response.success) {
           this.showNotification('資料提交成功！', 'success');
+          // CRITICAL FIX: Always return to the progress dashboard for in-factory forms
           if (this.config.IN_FACTORY_FORMS.includes(dataObject.formId)) {
             this.fetchAndShowProgressDashboard(this.state.currentFrameNumber);
           } else {
+            // For out-of-factory forms, simply go back home as they don't have a "progress" view.
             this.goHome();
           }
         } else {
