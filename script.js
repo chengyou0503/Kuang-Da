@@ -500,6 +500,7 @@ const app = {
 
   // --- Submits data to the server ---
   submitDataToServer(dataObject) {
+    console.log('Submitting data:', dataObject); // <-- DEBUGGING LINE
     this.showLoader('正在儲存資料...');
     // CRITICAL FIX: The backend expects the data to be in a parameter named 'formData'
     this.gasApi.run('processFormSubmit', { formData: JSON.stringify(dataObject) })
