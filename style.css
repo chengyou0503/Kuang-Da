@@ -55,6 +55,8 @@ body {
 
 .main-container { padding: 1rem; max-width: 800px; margin: 0 auto; }
 .admin-main-container { padding: 1rem; max-width: 1200px; margin: 0 auto; }
+.workflow-container { padding: 1rem; max-width: 1200px; margin: 0 auto; }
+
 .content-card { 
   background-color: var(--card-bg); 
   border-radius: 12px; 
@@ -62,6 +64,101 @@ body {
   box-shadow: var(--shadow-sm);
   padding: 1.5rem; 
 }
+
+/* --- Refined Table-Based Form Styles --- */
+.form-table-wrapper {
+  overflow-x: auto; /* Add horizontal scroll on small screens */
+}
+
+.form-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 1rem; /* Increased font size for readability */
+}
+
+.form-table th,
+.form-table td {
+  border: 1px solid var(--border-color);
+  padding: 0.8rem 1rem; /* Increased padding */
+  text-align: center;
+  vertical-align: middle;
+}
+
+.form-table th,
+.form-table .group-header {
+  background-color: #e9ecef; /* Lighter header color */
+  font-weight: 600;
+  text-align: left;
+}
+
+.form-table .radio-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem; /* Increased space between radio buttons */
+}
+
+.form-table .radio-group label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.form-table input[type="text"],
+.form-table input[type="radio"],
+.form-table input[type="checkbox"] {
+  margin: 0 0.5rem 0 0;
+}
+
+.form-table input[type="text"] {
+  width: 95%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+/* Photo Upload Styles */
+.photo-section {
+  margin-top: 1rem;
+}
+.photo-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.photo-item, .photo-item-full {
+  flex: 1;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+}
+.photo-upload-box {
+  display: block;
+  border: 2px dashed var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 1rem;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+.photo-upload-box:hover {
+  background-color: var(--secondary-color);
+  border-color: var(--accent-color);
+}
+.photo-upload-box input[type="file"] {
+  display: none;
+}
+.photo-upload-placeholder {
+  color: var(--text-color-light);
+}
+.photo-preview {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
 
 /* --- Buttons and Inputs --- */
 button { 
