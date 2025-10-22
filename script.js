@@ -475,12 +475,16 @@ const app = {
   async handleFormSubmit(form) {
     this.showLoader('正在提交資料...');
     const formData = new FormData(form);
-    const dataObject = Object.fromEntries(formData.entries());
-    dataObject.formId = form.id; // Add formId to the submission
-    // --- CRITICAL FIX ---
-    // Manually add frame number and user name to ensure they are always present.
-    dataObject.車架號碼 = this.state.currentFrameNumber;
-    dataObject.userName = this.dom.userNameInput.value.trim();
+
+    // --- FINAL FIX ---
+    // Create a base object with essential data first, then merge form data into it.
+    // This prevents conflicts and ensures all data is captured reliably.
+    const baseData = {
+      formId: form.id,
+      車架號碼: this.state.currentFrameNumber,
+      userName: this.dom.userNameInput.value.trim()
+    };
+    const dataObject = { ...baseData, ...Object.fromEntries(formData.entries()) };
     // --- END FIX ---
 
     const fileInputs = form.querySelectorAll('input[type="file"]');
