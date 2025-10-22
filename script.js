@@ -437,8 +437,7 @@ const app = {
           if (response.success && response.data && Object.keys(response.data).length > 0) {
             const formData = response.data;
             for (const key in formData) {
-              const nameToFind = key.startsWith(formId + '_') ? key.substring(formId.length + 1) : key;
-              const element = form.querySelector(`[name="${nameToFind}"]`);
+              const element = form.querySelector(`[name="${key}"]`);
               
               if (element) {
                 switch (element.type) {
