@@ -3,7 +3,7 @@ const app = {
   gasApi: {
     run(action, params = {}) {
       // Replace with your actual Google Apps Script Web App URL
-      const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz8gv3DaxSou_13d_50_IUQchJLQ2vVSskIldGaJo-qDp35XajAG4kp2AX0plYlOoZVcQ/exec';
+      const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwaCruHVMi3XW1uqM8BesmRO2Pgvb2wMiBmFEY594K6MNzNTar7K_LXCQaHcVvFyFzYdg/exec';
       console.log(`%c[API Request] -> ${action}`, 'color: #0052cc; font-weight: bold;', params);
       
       return new Promise((resolve, reject) => {
