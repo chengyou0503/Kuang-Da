@@ -1,101 +1,61 @@
-<!DOCTYPE html><html><body><form id="KD03"><input type="hidden" name="formId" value="KD03"><input type="hidden" name="車架號碼"><input type="hidden" name="車輛型號"><p align="right" style="margin:0;">表單編號：KD-03</p><h3 align="center" style="margin: 1rem 0;">車身組裝中施工規範自行查核表</h3><div class="form-table-wrapper"><table class="form-table"><tbody>
+<!DOCTYPE html><html><body><form><input type="hidden" name="formId" value="KD03"><input type="hidden" name="車架號碼"><input type="hidden" name="車輛型號"><p align="right">表單編號：KD-03</p><h3 align="center">車身組裝中施工規範自行查核表</h3><div class="form-table-wrapper"><table class="form-table">
           <tr>
-            <td data-label="品牌"><b>品　　牌</b></td>
-            <td data-label="品牌內容"><b>KD-鑛達</b></td>
-            <td data-label="車輛型號"><b>車輛型號</b></td>
-            <td data-label="車輛型號內容"><input type="text" name="車輛型號" readonly></td>
+            <td colspan="2" style="width: 20%;" data-label="品牌"><b>品　　牌</b></td>
+            <td style="width: 20%;" data-label="品牌內容"><b>KD-鑛達</b></td>
+            <td style="width: 20%;" data-label="車輛型號"><b>車輛型號</b></td>
+            <td colspan="3" style="width: 40%;" data-label="車輛型號內容"><input type="text" name="車輛型號" readonly></td>
           </tr>
           <tr>
-            <td data-label="車架號碼"><b>車架號碼</b></td>
+            <td colspan="2" data-label="車架號碼"><b>車架號碼</b></td>
             <td data-label="車架號碼內容">{{車架號碼}}</td>
             <td data-label="執行日期"><b>執行日期</b></td>
-            <td data-label="執行日期內容">{{KD03_更新時間}}</td>
-          </tr>
-          <tr class="group-header-row">
-            <td colspan="3" data-label="項目"><b>內　　　　容</b></td>
-            <td data-label="結果"><b>結　果</b></td>
+            <td colspan="3" data-label="執行日期內容">{{KD03_更新時間}}</td>
           </tr>
           <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">1. 車體組裝接縫處密合度是否密合平整。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item1_1" value="是" required>是</label><label><input type="radio" name="KD03_Item1_1" value="否">否</label></td>
+            <td colspan="5" data-label="項目"><b>內　　　　容</b></td>
+            <td data-label="是"><b>是</b></td>
+            <td data-label="否"><b>否</b></td>
           </tr>
           <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">2. 車體和接觸是否磨平，焊接後車架是否有重新上漆防鏽。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item1_2" value="是" required>是</label><label><input type="radio" name="KD03_Item1_2" value="否">否</label></td>
+            <td colspan="7" style="text-align: left; background-color:#f2f2f2;" data-label="區段"><b>一、車體組裝確認：</b></td>
           </tr>
           <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">3. 檢查車身骨架與前方向轉把（龍頭）安裝是否穩固順暢。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item1_3" value="是" required>是</label><label><input type="radio" name="KD03_Item1_3" value="否">否</label></td>
+            <td data-label="項次">1</td>
+            <td colspan="4" data-label="內容">車體組裝接縫處密合度是否密合平整。</td>
+            <td data-label="是"><input type="radio" name="KD03_Item1_1" value="是" required></td>
+            <td data-label="否"><input type="radio" name="KD03_Item1_1" value="否"></td>
           </tr>
           <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">4. 轉向柱與車架安裝是否穩固。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item1_4" value="是" required>是</label><label><input type="radio" name="KD03_Item1_4" value="否">否</label></td>
+            <td data-label="項次">2</td>
+            <td colspan="4" data-label="內容">車體和接觸是否磨平，焊接後車架是否有重新上漆防鏽。</td>
+            <td data-label="是"><input type="radio" name="KD03_Item1_2" value="是" required></td>
+            <td data-label="否"><input type="radio" name="KD03_Item1_2" value="否"></td>
           </tr>
           <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">5. 車架號碼是否與車輛編碼說明書一致</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item1_5" value="是" required>是</label><label><input type="radio" name="KD03_Item1_5" value="否">否</label></td>
+            <td data-label="項次">3</td>
+            <td colspan="4" data-label="內容">檢查車身骨架與前方向轉把（龍頭）安裝是否穩固順暢。</td>
+            <td data-label="是"><input type="radio" name="KD03_Item1_3" value="是" required></td>
+            <td data-label="否"><input type="radio" name="KD03_Item1_3" value="否"></td>
           </tr>
           <tr>
-            <td colspan="4" class="group-header" data-label="項目"><b>二、電路系統檢查：（控制器/馬達/電池等各部組裝部分）</b></td>
+            <td data-label="項次">4</td>
+            <td colspan="4" data-label="內容">轉向柱與車架安裝是否穩固。</td>
+            <td data-label="是"><input type="radio" name="KD03_Item1_4" value="是" required></td>
+            <td data-label="否"><input type="radio" name="KD03_Item1_4" value="否"></td>
           </tr>
           <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">1. 電池、控制器、馬達、DC/DC、充電座、線路系統是否安裝穩固。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_1" value="是" required>是</label><label><input type="radio" name="KD03_Item2_1" value="否">否</label></td>
+            <td data-label="項次">5</td>
+            <td colspan="4" data-label="內容">車架號碼是否與車輛編碼說明書一致</td>
+            <td data-label="是"><input type="radio" name="KD03_Item1_5" value="是" required></td>
+            <td data-label="否"><input type="radio" name="KD03_Item1_5" value="否"></td>
           </tr>
           <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">2. 電池組電壓是否正常。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_2" value="是" required>是</label><label><input type="radio" name="KD03_Item2_2" value="否">否</label></td>
+            <td colspan="7" style="text-align: left; background-color:#f2f2f2;" data-label="區段"><b>二、電路系統檢查：（控制器/馬達/電池等各部組裝部分）</b></td>
           </tr>
           <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">3. 電池組外觀是否良好。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_3" value="是" required>是</label><label><input type="radio" name="KD03_Item2_3" value="否">否</label></td>
+            <td data-label="項次">1</td>
+            <td colspan="4" data-label="內容">電線是否確實包覆。</td>
+            <td data-label="是"><input type="radio" name="KD03_Item2_1" value="是" required></td>
+            <td data-label="否"><input type="radio" name="KD03_Item2_1" value="否"></td>
           </tr>
-          <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">4. 電池組安裝是否穩固。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_4" value="是" required>是</label><label><input type="radio" name="KD03_Item2_4" value="否">否</label></td>
-          </tr>
-          <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">5. 電池組線路是否正常。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_5" value="是" required>是</label><label><input type="radio" name="KD03_Item2_5" value="否">否</label></td>
-          </tr>
-          <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">6. 電池組充電功能是否正常。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_6" value="是" required>是</label><label><input type="radio" name="KD03_Item2_6" value="否">否</label></td>
-          </tr>
-          <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">7. 電池組 BMS 是否正常。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_7" value="是" required>是</label><label><input type="radio" name="KD03_Item2_7" value="否">否</label></td>
-          </tr>
-          <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">8. 電池組溫度是否正常。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_8" value="是" required>是</label><label><input type="radio" name="KD03_Item2_8" value="否">否</label></td>
-          </tr>
-          <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">9. 電池組 SOC 是否正常。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_9" value="是" required>是</label><label><input type="radio" name="KD03_Item2_9" value="否">否</label></td>
-          </tr>
-          <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">10. 電池組 SOH 是否正常。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_10" value="是" required>是</label><label><input type="radio" name="KD03_Item2_10" value="否">否</label></td>
-          </tr>
-          <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">11. 電池組循環次數是否正常。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_11" value="是" required>是</label><label><input type="radio" name="KD03_Item2_11" value="否">否</label></td>
-          </tr>
-          <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">12. 電池組故障碼是否正常。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_12" value="是" required>是</label><label><input type="radio" name="KD03_Item2_12" value="否">否</label></td>
-          </tr>
-          <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">13. 電池組通訊是否正常。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_13" value="是" required>是</label><label><input type="radio" name="KD03_Item2_13" value="否">否</label></td>
-          </tr>
-          <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">14. 電池組絕緣是否正常。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_14" value="是" required>是</label><label><input type="radio" name="KD03_Item2_14" value="否">否</label></td>
-          </tr>
-          <tr>
-            <td colspan="3" class="form-question-text" data-label="內容">15. 電池組接點是否正常。</td>
-            <td class="radio-group" data-label="結果"><label><input type="radio" name="KD03_Item2_15" value="是" required>是</label><label><input type="radio" name="KD03_Item2_15" value="否">否</label></td>
-          </tr>
-        </tbody></table></div></form></body></html>
+        </table></div></form></body></html>

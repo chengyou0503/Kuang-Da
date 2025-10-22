@@ -1,83 +1,61 @@
-<!DOCTYPE html><html><body><form id="KD12"><input type="hidden" name="formId" value="KD12"><input type="hidden" name="車架號碼"><input type="hidden" name="車輛型號"><p align="right" style="margin:0;">表單編號：KD-12</p><h3 align="center" style="margin: 1rem 0;">車輛出廠檢驗查核表</h3><div class="form-table-wrapper"><table class="form-table"><tbody>
+<!DOCTYPE html><html><body><form><input type="hidden" name="formId" value="KD12"><input type="hidden" name="車架號碼"><input type="hidden" name="車輛型號"><p align="right">表單編號：KD-12</p><h3 align="center">車輛出廠檢驗查核表</h3><div class="form-table-wrapper"><table class="form-table">
           <tr>
-            <td data-label="品牌"><b>品　　牌</b></td>
-            <td data-label="品牌內容"><b>KD-鑛達</b></td>
-            <td data-label="車輛型號"><b>車輛型號</b></td>
-            <td data-label="車輛型號內容"><input type="text" name="車輛型號" readonly></td>
+            <td colspan="2" style="width: 20%;" data-label="品牌"><b>品　　牌</b></td>
+            <td colspan="2" style="width: 25%;" data-label="品牌內容">KD-鑛達</td>
+            <td style="width: 20%;" data-label="車輛型號"><b>車輛型號</b></td>
+            <td colspan="4" style="width: 35%;" data-label="車輛型號內容"><input type="text" name="車輛型號" readonly></td>
           </tr>
           <tr>
-            <td data-label="車架號碼"><b>車架號碼</b></td>
-            <td data-label="車架號碼內容">{{車架號碼}}</td>
+            <td colspan="2" data-label="車架號碼"><b>車架號碼</b></td>
+            <td colspan="2" data-label="車架號碼內容">{{車架號碼}}</td>
             <td data-label="執行日期"><b>執行日期</b></td>
-            <td data-label="執行日期內容">{{KD12_更新時間}}</td>
-          </tr>
-          <tr class="group-header-row">
-            <td colspan="2" data-label="項目"><b>內　　　　容</b></td>
-            <td data-label="結果"><b>結　果</b></td>
-            <td data-label="備註"><b>備　註</b></td>
+            <td colspan="4" data-label="執行日期內容">{{KD12_更新時間}}</td>
           </tr>
           <tr>
-            <td colspan="4" class="group-header" data-label="項目"><b>一、整車檢查（功能部份）：</b></td>
+            <td colspan="7" data-label="項目"><b>內　　　　容</b></td>
+            <td data-label="是"><b>是</b></td>
+            <td data-label="否"><b>否</b></td>
           </tr>
           <tr>
-            <td colspan="2" class="form-question-text" data-label="內容">1. 測試功能是否正常。（注意：方向燈、大燈、儀表板等把手功能區）</td>
-            <td data-label="結果" class="radio-group"><label><input type="radio" name="KD12_Item1_1" value="是" required>是</label><label><input type="radio" name="KD12_Item1_1" value="否">否</label></td>
-            <td data-label="備註"><input type="text" name="KD12_Note1_1"></td>
+            <td colspan="9" style="text-align:left; background-color:#f2f2f2;" data-label="區段"><b>一、整車檢查（功能部份）：</b></td>
           </tr>
           <tr>
-            <td colspan="2" class="form-question-text" data-label="內容">2. 催動馬達是否正常運作。（注意：轉動、穩定、輪胎定位、馬達聲音等是否正常）</td>
-            <td data-label="結果" class="radio-group"><label><input type="radio" name="KD12_Item1_2" value="是" required>是</label><label><input type="radio" name="KD12_Item1_2" value="否">否</label></td>
-            <td data-label="備註"><input type="text" name="KD12_Note1_2"></td>
+            <td data-label="項次">1</td>
+            <td colspan="6" data-label="內容">測試功能是否正常。（注意：方向燈、大燈、儀表板等把手功能區）</td>
+            <td data-label="是"><input type="radio" name="KD12_Item1_1" value="是" required></td>
+            <td data-label="否"><input type="radio" name="KD12_Item1_1" value="否"></td>
           </tr>
           <tr>
-            <td colspan="2" class="form-question-text" data-label="內容">3. 煞車功能是否順暢。（注意煞車回彈性與犀利度）</td>
-            <td data-label="結果" class="radio-group"><label><input type="radio" name="KD12_Item1_3" value="是" required>是</label><label><input type="radio" name="KD12_Item1_3" value="否">否</label></td>
-            <td data-label="備註"><input type="text" name="KD12_Note1_3"></td>
+            <td data-label="項次">2</td>
+            <td colspan="6" data-label="內容">催動馬達是否正常運作。（注意：轉動、穩定、輪胎定位、馬達聲音等是否正常）</td>
+            <td data-label="是"><input type="radio" name="KD12_Item1_2" value="是" required></td>
+            <td data-label="否"><input type="radio" name="KD12_Item1_2" value="否"></td>
           </tr>
           <tr>
-            <td colspan="4" class="group-header" data-label="項目"><b>二、整車檢查（內件部分）：</b></td>
+            <td data-label="項次">3</td>
+            <td colspan="6" data-label="內容">煞車功能是否順暢。（注意煞車回彈性與犀利度）</td>
+            <td data-label="是"><input type="radio" name="KD12_Item1_3" value="是" required></td>
+            <td data-label="否"><input type="radio" name="KD12_Item1_3" value="否"></td>
           </tr>
           <tr>
-            <td colspan="2" class="form-question-text" data-label="內容">1. 置物箱、腳踏板、車體內部是否清潔。</td>
-            <td data-label="結果" class="radio-group"><label><input type="radio" name="KD12_Item2_1" value="是" required>是</label><label><input type="radio" name="KD12_Item2_1" value="否">否</label></td>
-            <td data-label="備註"><input type="text" name="KD12_Note2_1"></td>
+            <td colspan="9" style="text-align:left; background-color:#f2f2f2;" data-label="區段"><b>二、整車檢查（內件部分）：</b></td>
           </tr>
           <tr>
-            <td colspan="2" class="form-question-text" data-label="內容">2. 坐墊是否可正常開啟與關閉。</td>
-            <td data-label="結果" class="radio-group"><label><input type="radio" name="KD12_Item2_2" value="是" required>是</label><label><input type="radio" name="KD12_Item2_2" value="否">否</label></td>
-            <td data-label="備註"><input type="text" name="KD12_Note2_2"></td>
+            <td data-label="項次">1</td>
+            <td colspan="6" data-label="內容">煞車線設置是否順暢。</td>
+            <td data-label="是"><input type="radio" name="KD12_Item2_1" value="是" required></td>
+            <td data-label="否"><input type="radio" name="KD12_Item2_1" value="否"></td>
           </tr>
           <tr>
-            <td colspan="2" class="form-question-text" data-label="內容">3. 隨車工具與文件是否齊全。（如：充電器、鑰匙、遙控器、使用說明書、出廠證明、貨物稅單、發票）</td>
-            <td data-label="結果" class="radio-group"><label><input type="radio" name="KD12_Item2_3" value="是" required>是</label><label><input type="radio" name="KD12_Item2_3" value="否">否</label></td>
-            <td data-label="備註"><input type="text" name="KD12_Note2_3"></td>
+            <td data-label="項次">2</td>
+            <td colspan="6" data-label="內容">避震器功能是否良好。</td>
+            <td data-label="是"><input type="radio" name="KD12_Item2_2" value="是" required></td>
+            <td data-label="否"><input type="radio" name="KD12_Item2_2" value="否"></td>
           </tr>
           <tr>
-            <td colspan="4" class="group-header" data-label="項目"><b>三、整車檢查（外觀部份）：</b></td>
+            <td data-label="項次">3</td>
+            <td colspan="6" data-label="內容">輪胎胎壓是否足夠。</td>
+            <td data-label="是"><input type="radio" name="KD12_Item2_3" value="是" required></td>
+            <td data-label="否"><input type="radio" name="KD12_Item2_3" value="否"></td>
           </tr>
-          <tr>
-            <td colspan="2" class="form-question-text" data-label="內容">1. 車輛外觀是否乾淨。</td>
-            <td data-label="結果" class="radio-group"><label><input type="radio" name="KD12_Item3_1" value="是" required>是</label><label><input type="radio" name="KD12_Item3_1" value="否">否</label></td>
-            <td data-label="備註"><input type="text" name="KD12_Note3_1"></td>
-          </tr>
-          <tr>
-            <td colspan="2" class="form-question-text" data-label="內容">2. 車輛外觀是否有刮傷、掉漆、污漬。</td>
-            <td data-label="結果" class="radio-group"><label><input type="radio" name="KD12_Item3_2" value="是" required>是</label><label><input type="radio" name="KD12_Item3_2" value="否">否</label></td>
-            <td data-label="備註"><input type="text" name="KD12_Note3_2"></td>
-          </tr>
-          <tr>
-            <td colspan="2" class="form-question-text" data-label="內容">3. 輪胎胎壓是否正常。</td>
-            <td data-label="結果" class="radio-group"><label><input type="radio" name="KD12_Item3_3" value="是" required>是</label><label><input type="radio" name="KD12_Item3_3" value="否">否</label></td>
-            <td data-label="備註"><input type="text" name="KD12_Note3_3"></td>
-          </tr>
-          <tr>
-            <td colspan="2" class="form-question-text" data-label="內容">4. 照後鏡、腳踏塞、後扶手是否安裝牢固。</td>
-            <td data-label="結果" class="radio-group"><label><input type="radio" name="KD12_Item3_4" value="是" required>是</label><label><input type="radio" name="KD12_Item3_4" value="否">否</label></td>
-            <td data-label="備註"><input type="text" name="KD12_Note3_4"></td>
-          </tr>
-          <tr>
-            <td colspan="2" class="form-question-text" data-label="內容">5. 檢查車身貼紙是否黏貼正確。</td>
-            <td data-label="結果" class="radio-group"><label><input type="radio" name="KD12_Item3_5" value="是" required>是</label><label><input type="radio" name="KD12_Item3_5" value="否">否</label></td>
-            <td data-label="備註"><input type="text" name="KD12_Note3_5"></td>
-          </tr>
-        </tbody></table></div></form></body></html>
+        </table></div></form></body></html>

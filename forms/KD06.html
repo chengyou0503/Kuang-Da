@@ -1,109 +1,52 @@
-<!DOCTYPE html><html><body><form id="KD06"><input type="hidden" name="formId" value="KD06"><input type="hidden" name="車架號碼"><input type="hidden" name="車輛型號"><p align="right" style="margin:0;">表單編號：KD-06</p><h3 align="center" style="margin: 1rem 0;">車輛完成品品質管制檢查表</h3><div class="form-table-wrapper"><table class="form-table"><tbody>
+<!DOCTYPE html><html><body><form><input type="hidden" name="formId" value="KD06"><input type="hidden" name="車架號碼"><input type="hidden" name="車輛型號"><p align="right">表單編號：KD-06</p><h3 align="center">車輛完成品品質管制檢查表</h3><div class="form-table-wrapper"><table class="form-table" style="table-layout: fixed;">
           <tr>
-            <td data-label="合格證核准字號"><b>合格證核准字號</b></td>
-            <td colspan="3" data-label="內容">微電審(113)字第1006 號</td>
-            <td data-label="抽驗日期"><b>抽驗日期</b></td>
-            <td colspan="2" data-label="抽驗日期內容">{{KD06_更新時間}}</td>
+            <td style="width: 15%;" data-label="合格證核准字號"><b>合格證核准字號</b></td>
+            <td colspan="5" style="width: 40%;" data-label="內容">微電審(113)字第1006 號</td>
+            <td style="width: 15%;" data-label="抽驗日期"><b>抽驗日期</b></td>
+            <td colspan="3" style="width: 30%;" data-label="抽驗日期內容">{{KD06_更新時間}}</td>
           </tr>
           <tr>
             <td data-label="廠牌名稱"><b>廠牌名稱</b></td>
-            <td data-label="廠牌名稱內容">KD-鑛達</td>
+            <td colspan="2" data-label="廠牌名稱內容">KD-鑛達</td>
             <td data-label="型號/顏色"><b>型號/顏色</b></td>
-            <td data-label="型號/顏色內容"><input type="text" name="KD06_型號顏色" required></td>
+            <td colspan="2" data-label="型號/顏色內容"><input type="text" name="KD06_型號顏色" required></td>
             <td data-label="車身號碼"><b>車身號碼</b></td>
-            <td colspan="2" data-label="車身號碼內容">{{車架號碼}}</td>
+            <td colspan="3" data-label="車身號碼內容">{{車架號碼}}</td>
           </tr>
-          <tr class="group-header-row">
-            <td data-label="檢測項目"><b>檢測項目</b></td>
-            <td data-label="檢測標準"><b>檢測標準</b></td>
-            <td colspan="2" data-label="檢查結果"><b>檢查結果</b></td>
-            <td data-label="判定"><b>判定</b></td>
-            <td colspan="2" data-label="備註"><b>備註</b></td>
-          </tr>
-          <tr>
-            <td class="form-question-text" data-label="檢測項目">車身檢視</td>
-            <td class="form-question-text" data-label="檢測標準">車身號碼是否清晰及正確</td>
-            <td colspan="2" class="radio-group" data-label="檢查結果"><label><input type="radio" name="KD06_Result1" value="是" required>是</label><label><input type="radio" name="KD06_Result1" value="否">否</label></td>
-            <td class="radio-group" data-label="判定"><label><input type="radio" name="KD06_Judgement1" value="合格" required>合格</label><label><input type="radio" name="KD06_Judgement1" value="不合格">不合格</label></td>
-            <td colspan="2" data-label="備註"><input type="text" name="KD06_Note1"></td>
-          </tr>
-          <tr>
-            <td class="form-question-text" data-label="檢測項目">傳動（驅動）裝置檢視</td>
-            <td class="form-question-text" data-label="檢測標準">是否發生干涉、異音</td>
-            <td colspan="2" class="radio-group" data-label="檢查結果"><label><input type="radio" name="KD06_Result2" value="是" required>是</label><label><input type="radio" name="KD06_Result2" value="否">否</label></td>
-            <td class="radio-group" data-label="判定"><label><input type="radio" name="KD06_Judgement2" value="合格" required>合格</label><label><input type="radio" name="KD06_Judgement2" value="不合格">不合格</label></td>
-            <td colspan="2" data-label="備註"><input type="text" name="KD06_Note2"></td>
-          </tr>
-          <tr>
-            <td class="form-question-text" rowspan="3" data-label="檢測項目">轉向裝置檢視</td>
-            <td class="form-question-text" data-label="檢測標準">轉向是否正常</td>
-            <td colspan="2" class="radio-group" data-label="檢查結果"><label><input type="radio" name="KD06_Result3" value="是" required>是</label><label><input type="radio" name="KD06_Result3" value="否">否</label></td>
-            <td class="radio-group" data-label="判定"><label><input type="radio" name="KD06_Judgement3" value="合格" required>合格</label><label><input type="radio" name="KD06_Judgement3" value="不合格">不合格</label></td>
-            <td colspan="2" data-label="備註"><input type="text" name="KD06_Note3"></td>
-          </tr>
-          <tr>
-            <td class="form-question-text" data-label="檢測標準">前輪定位是否正常</td>
-            <td colspan="2" class="radio-group" data-label="檢查結果"><label><input type="radio" name="KD06_Result4" value="是" required>是</label><label><input type="radio" name="KD06_Result4" value="否">否</label></td>
-            <td class="radio-group" data-label="判定"><label><input type="radio" name="KD06_Judgement4" value="合格" required>合格</label><label><input type="radio" name="KD06_Judgement4" value="不合格">不合格</label></td>
-            <td colspan="2" data-label="備註"><input type="text" name="KD06_Note4"></td>
-          </tr>
-          <tr>
-            <td class="form-question-text" data-label="檢測標準">前輪外傾角是否正常</td>
-            <td colspan="2" class="radio-group" data-label="檢查結果"><label><input type="radio" name="KD06_Result5" value="是" required>是</label><label><input type="radio" name="KD06_Result5" value="否">否</label></td>
-            <td class="radio-group" data-label="判定"><label><input type="radio" name="KD06_Judgement5" value="合格" required>合格</label><label><input type="radio" name="KD06_Judgement5" value="不合格">不合格</label></td>
-            <td colspan="2" data-label="備註"><input type="text" name="KD06_Note5"></td>
-          </tr>
-          <tr>
-            <td class="form-question-text" rowspan="2" data-label="檢測項目">煞車裝置檢視</td>
-            <td class="form-question-text" data-label="檢測標準">煞車功能是否正常</td>
-            <td colspan="2" class="radio-group" data-label="檢查結果"><label><input type="radio" name="KD06_Result6" value="是" required>是</label><label><input type="radio" name="KD06_Result6" value="否">否</label></td>
-            <td class="radio-group" data-label="判定"><label><input type="radio" name="KD06_Judgement6" value="合格" required>合格</label><label><input type="radio" name="KD06_Judgement6" value="不合格">不合格</label></td>
-            <td colspan="2" data-label="備註"><input type="text" name="KD06_Note6"></td>
-          </tr>
-          <tr>
-            <td class="form-question-text" data-label="檢測標準">駐車（手煞車）功能是否正常</td>
-            <td colspan="2" class="radio-group" data-label="檢查結果"><label><input type="radio" name="KD06_Result7" value="是" required>是</label><label><input type="radio" name="KD06_Result7" value="否">否</label></td>
-            <td class="radio-group" data-label="判定"><label><input type="radio" name="KD06_Judgement7" value="合格" required>合格</label><label><input type="radio" name="KD06_Judgement7" value="不合格">不合格</label></td>
-            <td colspan="2" data-label="備註"><input type="text" name="KD06_Note7"></td>
-          </tr>
-          <tr>
-            <td class="form-question-text" rowspan="3" data-label="檢測項目">燈光裝置檢視</td>
-            <td class="form-question-text" data-label="檢測標準">頭燈、尾燈、方向燈、煞車燈是否正常</td>
-            <td colspan="2" class="radio-group" data-label="檢查結果"><label><input type="radio" name="KD06_Result8" value="是" required>是</label><label><input type="radio" name="KD06_Result8" value="否">否</label></td>
-            <td class="radio-group" data-label="判定"><label><input type="radio" name="KD06_Judgement8" value="合格" required>合格</label><label><input type="radio" name="KD06_Judgement8" value="不合格">不合格</label></td>
-            <td colspan="2" data-label="備註"><input type="text" name="KD06_Note8"></td>
-          </tr>
-          <tr>
-            <td class="form-question-text" data-label="檢測標準">喇叭功能是否正常</td>
-            <td colspan="2" class="radio-group" data-label="檢查結果"><label><input type="radio" name="KD06_Result9" value="是" required>是</label><label><input type="radio" name="KD06_Result9" value="否">否</label></td>
-            <td class="radio-group" data-label="判定"><label><input type="radio" name="KD06_Judgement9" value="合格" required>合格</label><label><input type="radio" name="KD06_Judgement9" value="不合格">不合格</label></td>
-            <td colspan="2" data-label="備註"><input type="text" name="KD06_Note9"></td>
-          </tr>
-          <tr>
-            <td class="form-question-text" data-label="檢測標準">儀表板功能是否正常</td>
-            <td colspan="2" class="radio-group" data-label="檢查結果"><label><input type="radio" name="KD06_Result10" value="是" required>是</label><label><input type="radio" name="KD06_Result10" value="否">否</label></td>
-            <td class="radio-group" data-label="判定"><label><input type="radio" name="KD06_Judgement10" value="合格" required>合格</label><label><input type="radio" name="KD06_Judgement10" value="不合格">不合格</label></td>
-            <td colspan="2" data-label="備註"><input type="text" name="KD06_Note10"></td>
-          </tr>
-          <tr>
-            <td class="form-question-text" data-label="檢測項目">輪胎檢視</td>
-            <td class="form-question-text" data-label="檢測標準">胎紋、胎壓是否正常</td>
-            <td colspan="2" class="radio-group" data-label="檢查結果"><label><input type="radio" name="KD06_Result11" value="是" required>是</label><label><input type="radio" name="KD06_Result11" value="否">否</label></td>
-            <td class="radio-group" data-label="判定"><label><input type="radio" name="KD06_Judgement11" value="合格" required>合格</label><label><input type="radio" name="KD06_Judgement11" value="不合格">不合格</label></td>
-            <td colspan="2" data-label="備註"><input type="text" name="KD06_Note11"></td>
-          </tr>
-          <tr>
-            <td class="form-question-text" data-label="檢測項目">其他檢視</td>
-            <td class="form-question-text" data-label="檢測標準">各部螺絲是否鎖緊</td>
-            <td colspan="2" class="radio-group" data-label="檢查結果"><label><input type="radio" name="KD06_Result12" value="是" required>是</label><label><input type="radio" name="KD06_Result12" value="否">否</label></td>
-            <td class="radio-group" data-label="判定"><label><input type="radio" name="KD06_Judgement12" value="合格" required>合格</label><label><input type="radio" name="KD06_Judgement12" value="不合格">不合格</label></td>
-            <td colspan="2" data-label="備註"><input type="text" name="KD06_Note12"></td>
-          </tr>
-          <tr>
-            <td colspan="7" data-label="判定結果">
-              <b>判定結果：</b>
-              <label><input type="radio" name="KD06_FinalJudgement" value="合格" required> 合格</label>
-              <label><input type="radio" name="KD06_FinalJudgement" value="不合格"> 不合格</label>
-            </td>
-          </tr>
-        </tbody></table></div></form></body></html>
+          <thead><tr>
+            <th style="width: 15%;">檢測項目</th>
+            <th style="width: 40%;">檢測標準</th>
+            <th style="width: 15%;">檢查結果</th>
+            <th style="width: 15%;">判定</th>
+            <th style="width: 15%;">備註</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td data-label="檢測項目">車身檢視</td>
+              <td data-label="檢測標準">車身號碼是否清晰及正確</td>
+              <td data-label="檢查結果">是 <input type="radio" name="KD06_Result1" value="是" required><br>否 <input type="radio" name="KD06_Result1" value="否"></td>
+              <td data-label="判定">合格 <input type="radio" name="KD06_Judgement1" value="合格" required><br>不合格 <input type="radio" name="KD06_Judgement1" value="不合格"></td>
+              <td data-label="備註"><input type="text" name="KD06_Note1"></td>
+            </tr>
+            <tr>
+              <td data-label="檢測項目">傳動（驅動）裝置檢視</td>
+              <td data-label="檢測標準">是否發生干涉、異音</td>
+              <td data-label="檢查結果">是 <input type="radio" name="KD06_Result2" value="是" required><br>否 <input type="radio" name="KD06_Result2" value="否"></td>
+              <td data-label="判定">合格 <input type="radio" name="KD06_Judgement2" value="合格" required><br>不合格 <input type="radio" name="KD06_Judgement2" value="不合格"></td>
+              <td data-label="備註"><input type="text" name="KD06_Note2"></td>
+            </tr>
+            <tr>
+              <td rowspan="3" data-label="檢測項目">轉向裝置檢視</td>
+              <td data-label="檢測標準">轉向是否正常</td>
+              <td data-label="檢查結果">是 <input type="radio" name="KD06_Result3" value="是" required><br>否 <input type="radio" name="KD06_Result3" value="否"></td>
+              <td data-label="判定">合格 <input type="radio" name="KD06_Judgement3" value="合格" required><br>不合格 <input type="radio" name="KD06_Judgement3" value="不合格"></td>
+              <td data-label="備註"><input type="text" name="KD06_Note3"></td>
+            </tr>
+            <tr>
+              <td data-label="檢測標準">轉向是否發生干涉</td>
+              <td data-label="檢查結果">是 <input type="radio" name="KD06_Result4" value="是" required><br>否 <input type="radio" name="KD06_Result4" value="否"></td>
+              <td data-label="判定">合格 <input type="radio" name="KD06_Judgement4" value="合格" required><br>不合格 <input type="radio" name="KD06_Judgement4" value="不合格"></td>
+              <td data-label="備註"><input type="text" name="KD06_Note4"></td>
+            </tr>
+          </tbody>
+        </table></div></form></body></html>
