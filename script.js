@@ -89,46 +89,32 @@ const app = {
     };
   },
 
-  // --- Initializes the application ---
-  init() {
-    this.cacheDomElements();
-    this.showLoader('正在初始化應用...');
-    
-    this.gasApi.run('getInitialPayload')
-      .then(response => {
-        if (response.success) {
-          const payload = response.data;
-          this.config = payload.config;
-          this.maintenanceData = payload.maintenanceData;
-          
-          this.preloadForms(); 
-          this.setupEventListeners();
-          this.renderTabs();
-          this.loadPersistedData();
-          this.setActiveTab('in-factory');
-        } else {
-          this.handleError(response.message);
-        }
-      })
-      .catch(this.handleError.bind(this))
-      .finally(() => this.hideLoader());
-  },
-  
-  // --- Preloads all form HTML for instant access ---
-  async preloadForms() {
-    const allForms = [...this.config.IN_FACTORY_FORMS, ...this.config.OUT_FACTORY_FORMS];
-    for (const formId of allForms) {
-      try {
-        // Corrected path to fetch from the root forms directory
-        const response = await fetch(`forms/${formId}.html`);
-        if (!response.ok) throw new Error(`Form ${formId} not found at forms/${formId}.html`);
-        this.state.formCache[formId] = await response.text();
-      } catch (error) {
-        console.error(`Failed to preload form ${formId}:`, error);
-      }
-    }
-  },
-
+    // --- Initializes the application ---
+    init() {
+      this.cacheDomElements();
+      this.bindEvents(); // Manually bind 'this' for all event handlers
+      this.showLoader('正在初始化應用...');
+      
+      this.gasApi.run('getInitialPayload')
+        .then(response => {
+          if (response.success) {
+            const payload = response.data;
+            this.config = payload.config;
+            this.maintenanceData = payload.maintenanceData;
+            
+            // Forms are now lazy-loaded, no preload needed.
+            
+            this.setupEventListeners();
+            this.renderTabs();
+            this.loadPersistedData();
+            this.setActiveTab('in-factory');
+          } else {
+            this.handleError(response.message);
+          }
+        })
+        .catch(this.handleError.bind(this))
+        .finally(() => this.hideLoader());
+    },
   // --- Fetches form structure from the local cache ---
   fetchFormStructure(formId) {
     return new Promise((resolve, reject) => {
@@ -347,70 +333,52 @@ const app = {
         if (dateField) dateField.valueAsDate = new Date();
       },
     
-      // --- Base function to render a form from the backend ---
-      async showFormBase(formId, isEdit, context) {
-    try {
-      this.showLoader(`正在載入表單...`);
-
-      // 1. Set a loading placeholder for the whole container
-      this.dom.workflowContainer.innerHTML = `
-        <div class="content-card active">
-          <div class="workflow-header">
-            <h2>${context.title}</h2>
-            <p>${context.subtitle} | 作業人員: <strong>${this.dom.userNameInput.value.trim()}</strong></p>
-          </div>
-          <div class="form-container"><p>正在載入表單結構...</p></div>
-          <div class="workflow-actions">
-            <button class="btn-secondary" id="back-button">${context.backButtonText}</button>
-          </div>
-        </div>`;
-      this.dom.workflowContainer.querySelector('#back-button').addEventListener('click', context.backButtonAction);
-
-      // 2. Fetch the form HTML
-      const formHtml = await this.fetchFormStructure(formId);
-      if (!formHtml) throw new Error(`無法載入表單 ${formId} 的 HTML。`);
+        // --- Base function to render a form from the backend ---
+        async showFormBase(formId, isEdit, context) {
+          try {
+            this.showLoader(`正在載入表單...`);
       
-      // 3. Inject the blank form HTML into the page
-      const formContainer = this.dom.workflowContainer.querySelector('.form-container');
-      formContainer.innerHTML = formHtml;
+            // 1. Fetch the form HTML first.
+            const formHtml = await this.fetchFormStructure(formId);
+            if (!formHtml) throw new Error(`無法載入表單 ${formId} 的 HTML。`);
       
-      const form = formContainer.querySelector('form');
-      if (!form) throw new Error('在載入的 HTML 中找不到 <form> 元素。');
+            // 2. Render the main structure with the form HTML inside.
+            this.dom.workflowContainer.innerHTML = `
+              <div class="content-card active">
+                <div class="workflow-header">
+                  <h2>${context.title}</h2>
+                  <p>${context.subtitle} | 作業人員: <strong>${this.dom.userNameInput.value.trim()}</strong></p>
+                </div>
+                <div class="form-container">${formHtml}</div>
+                <div class="workflow-actions">
+                  <button type="submit" form="${formId}" class="btn-primary">提交表單</button>
+                  <button class="btn-secondary" id="back-button">${context.backButtonText}</button>
+                </div>
+              </div>`;
+            
+            // 3. Now that the form is in the DOM, get a reference to it.
+            const form = this.dom.workflowContainer.querySelector('form');
+            if (!form) throw new Error('在載入的 HTML 中找不到 <form> 元素。');
       
-      // 4. Populate dynamic fields (like username, framenumber)
-      this.populateDynamicFields(form, form.id, this.state.currentFrameNumber);
-      
-      // 5. If in edit mode, NOW populate it with historical data
-      if (isEdit) {
-        // Temporarily show a message inside the form
-        const originalHtml = formContainer.innerHTML;
-        formContainer.innerHTML = `<p>正在載入歷史資料...</p>`;
-        try {
-          await this.loadAndPopulateFormData(form, form.id, this.state.currentFrameNumber);
-          // Restore the form's HTML structure after data is ready to be populated
-          formContainer.innerHTML = originalHtml;
-          // Re-run population on the now-visible form elements
-          await this.loadAndPopulateFormData(form, form.id, this.state.currentFrameNumber);
-        } catch (e) {
-          // If loading fails, still show the blank form
-          formContainer.innerHTML = originalHtml;
-          this.handleError(e);
-        }
-      }
-      
-      // 6. Add submit button and event listener
-      const submitButton = `<button type="submit" form="${form.id}" class="btn-primary">提交表單</button>`;
-      this.dom.workflowContainer.querySelector('.workflow-actions').insertAdjacentHTML('afterbegin', submitButton);
-      form.addEventListener('submit', this.handleFormSubmit.bind(this));
-      
-      this.showScreen('workflow-container');
-    } catch (error) {
-      this.handleError(error);
-    } finally {
-      this.hideLoader();
-    }
-  },
-
+            // 4. Attach event listeners.
+            form.addEventListener('submit', this.handleFormSubmit);
+            this.dom.workflowContainer.querySelector('#back-button').addEventListener('click', context.backButtonAction);
+            
+            // 5. Populate dynamic fields (like username, framenumber).
+            this.populateDynamicFields(form, form.id, this.state.currentFrameNumber);
+            
+            // 6. If in edit mode, NOW populate it with historical data.
+            if (isEdit) {
+              await this.loadAndPopulateFormData(form, form.id, this.state.currentFrameNumber);
+            }
+            
+            this.showScreen('workflow-container');
+          } catch (error) {
+            this.handleError(error);
+          } finally {
+            this.hideLoader();
+          }
+        },
   // --- Loads and populates a form with existing data ---
   loadAndPopulateFormData(form, formId, frameNumber) {
     // Return a promise to allow async/await
