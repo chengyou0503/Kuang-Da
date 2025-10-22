@@ -442,7 +442,7 @@ const app = {
               if (element) {
                 switch (element.type) {
                   case 'radio': {
-                    const radioToSelect = form.querySelector(`[name="${nameToFind}"][value="${formData[key]}"]`);
+                    const radioToSelect = form.querySelector(`[name="${key}"][value="${formData[key]}"]`);
                     if (radioToSelect) radioToSelect.checked = true;
                     break;
                   }
@@ -451,7 +451,7 @@ const app = {
                     break;
                   case 'file': {
                     if (typeof formData[key] === 'string' && formData[key].startsWith('http')) {
-                      const preview = document.getElementById(`${form.id}_${nameToFind}_preview`);
+                      const preview = document.getElementById(`${form.id}_${key}_preview`);
                       if(preview) {
                           preview.src = formData[key];
                           preview.style.display = 'block';
