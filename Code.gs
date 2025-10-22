@@ -139,15 +139,24 @@ function getFormResponseData(formId, frameNumber) {
 
 function processFormSubmit(formData) {
   const sheet = SpreadsheetApp.openById(CONFIG.SHEET_ID).getSheetByName(CONFIG.SHEET_NAME);
+  if (!sheet) {
+    throw new Error(`找不到工作表: "${CONFIG.SHEET_NAME}"`);
+  }
   const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
   
   const formId = formData.formId;
-  // CRITICAL FIX: Use the correct key to get the frame number
   const frameNumber = formData.車架號碼; 
   
   if (!frameNumber || !formId) {
     throw new Error("提交的資料中缺少 '車架號碼' 或 'formId'");
   }
+
+  // --- DEBUGGING & ROBUSTNESS ---
+  const frameNumberIndex = headers.indexOf('車架號碼');
+  if (frameNumberIndex === -1) {
+    throw new Error("後端錯誤：在 Google Sheet 中找不到 '車架號碼' 欄位。請確認欄位名稱完全相符。");
+  }
+  // --- END DEBUGGING ---
 
   const PHOTO_UPLOAD_FOLDER_ID = "1-2Xb_doEh21p-x2d227FkOFL-3-QzAbp"; // Change to your target folder
 
@@ -174,34 +183,38 @@ function processFormSubmit(formData) {
   const updates = {};
   for (const key in formData) {
     if (key !== 'formId') {
-      // The full key name (e.g., KD03_Item1_1) is now expected from the form
       updates[key] = formData[key];
     }
   }
   updates[`${formId}_完成`] = new Date();
-  updates[`${formId}_作業人員`] = formData.userName; // Assuming userName is passed
+  updates[`${formId}_作業人員`] = formData.userName;
   updates[`${formId}_日期`] = new Date();
 
   // Find row or create new one
   const data = sheet.getDataRange().getValues();
   data.shift(); // remove headers
-  const frameNumberIndex = headers.indexOf('車架號碼');
   let rowIndex = data.findIndex(row => String(row[frameNumberIndex]).trim().toUpperCase() === String(frameNumber).trim().toUpperCase());
 
   if (rowIndex === -1) {
+    Logger.log(`找不到現有資料，將為 ${frameNumber} 新增一列。`);
     const newRowValues = new Array(headers.length).fill('');
     newRowValues[frameNumberIndex] = frameNumber;
     for (const headerName in updates) {
       const colIndex = headers.indexOf(headerName);
-      if (colIndex !== -1) { newRowValues[colIndex] = updates[headerName]; }
+      if (colIndex !== -1) {
+        newRowValues[colIndex] = updates[headerName];
+      } else {
+        Logger.log(`警告：在 Google Sheet 中找不到欄位 "${headerName}"，此資料將被忽略。`);
+      }
     }
     sheet.appendRow(newRowValues);
   } else {
     const rowNumber = rowIndex + 2; // +1 for 1-based index, +1 for header row
+    Logger.log(`找到 ${frameNumber} 的現有資料，將更新第 ${rowNumber} 列。`);
     updateSheetRow(sheet, rowNumber, headers, updates);
   }
 
-  SCRIPT_CACHE.remove(`sheetData_${CONFIG.SHEET_ID}`); // Invalidate cache
+  SCRIPT_CACHE.remove(`sheetData_${CONFIG.SHEET_ID}`);
   return { success: true, message: `${CONFIG.FORM_NAMES[formId]} (${frameNumber}) 資料已儲存` };
 }
 
@@ -228,6 +241,8 @@ function updateSheetRow(sheet, rowNumber, headers, updates) {
     const colIndex = headers.indexOf(headerName);
     if (colIndex !== -1) {
       values[colIndex] = updates[headerName];
+    } else {
+      Logger.log(`警告 (更新)：在 Google Sheet 中找不到欄位 "${headerName}"，此資料將被忽略。`);
     }
   }
   range.setValues([values]);
