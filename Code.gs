@@ -202,7 +202,7 @@ function processFormSubmit(formData) {
   }
 
   SCRIPT_CACHE.remove(`sheetData_${CONFIG.SHEET_ID}`); // Invalidate cache
-  return { success: true, message: `${FORM_STRUCTURES[formId].title} (${frameNumber}) 資料已儲存` };
+  return { success: true, message: `${CONFIG.FORM_NAMES[formId]} (${frameNumber}) 資料已儲存` };
 }
 
 // --- Utility Functions ---
