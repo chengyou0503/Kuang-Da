@@ -92,6 +92,7 @@ const app = {
   // --- Initializes the application ---
   init() {
     this.cacheDomElements();
+    this.bindEvents(); // Manually bind 'this' for all event handlers
     this.showLoader('正在初始化應用...');
     
     this.gasApi.run('getInitialPayload')
@@ -101,9 +102,7 @@ const app = {
           this.config = payload.config;
           this.maintenanceData = payload.maintenanceData;
           
-          // Preload forms for faster access
           this.preloadForms(); 
-          
           this.setupEventListeners();
           this.renderTabs();
           this.loadPersistedData();
@@ -114,6 +113,16 @@ const app = {
       })
       .catch(this.handleError.bind(this))
       .finally(() => this.hideLoader());
+  },
+
+  // --- Manually binds 'this' for all event handlers ---
+  bindEvents() {
+    this.startProcess = this.startProcess.bind(this);
+    this.toggleScanner = this.toggleScanner.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.goHome = this.goHome.bind(this);
+    this.showForm = this.showForm.bind(this);
+    this.showDirectForm = this.showDirectForm.bind(this);
   },
   
   // --- Preloads all form HTML for instant access ---
@@ -158,8 +167,8 @@ const app = {
 
   // --- Sets up all event listeners ---
   setupEventListeners() {
-    this.dom.startBtn.addEventListener('click', this.startProcess.bind(this));
-    this.dom.scanBtn.addEventListener('click', this.toggleScanner.bind(this));
+    this.dom.startBtn.addEventListener('click', this.startProcess);
+    this.dom.scanBtn.addEventListener('click', this.toggleScanner);
     this.dom.frameNumberInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') this.startProcess();
     });
@@ -300,8 +309,8 @@ const app = {
         </div>
       </div>`;
 
-    // Use Event Listeners instead of onclick, ensuring 'this' context is correct
-    this.dom.workflowContainer.querySelector('#back-to-home').addEventListener('click', this.goHome.bind(this));
+    // Use Event Listeners with pre-bound 'this'
+    this.dom.workflowContainer.querySelector('#back-to-home').addEventListener('click', this.goHome);
     this.dom.workflowContainer.querySelectorAll('.btn-primary').forEach(button => {
       button.addEventListener('click', (e) => {
         const formId = e.currentTarget.dataset.formId;
@@ -326,7 +335,7 @@ const app = {
     html += '</div>';
     this.dom.outFactoryContent.innerHTML = html;
 
-    // Use Event Listeners instead of onclick, ensuring 'this' context is correct
+    // Use Event Listeners with pre-bound 'this'
     this.dom.outFactoryContent.querySelectorAll('.btn-secondary').forEach(button => {
         button.addEventListener('click', (e) => {
             this.showDirectForm(e.currentTarget.dataset.formId);
