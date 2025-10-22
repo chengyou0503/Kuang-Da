@@ -346,18 +346,27 @@ const app = {
         this.showFormBase(formId, false, context);
       },
     
-      // --- Populates form fields with dynamic data ---
-      populateDynamicFields(form, formId, frameNumber) {
-        const userNameField = form.querySelector('[name="userName"]');
-        if (userNameField) userNameField.value = this.dom.userNameInput.value.trim();
-        
-        const frameNumberField = form.querySelector('[name="frameNumber"]');
-        if (frameNumberField) frameNumberField.value = frameNumber;
-        
-        const dateField = form.querySelector('[name="date"]');
-        if (dateField) dateField.valueAsDate = new Date();
-      },
-    
+        // --- Populates form fields with dynamic data ---
+        populateDynamicFields(form, formId, frameNumber) {
+          // For the new table-based forms, we replace placeholders in the HTML
+          const formContainer = this.dom.workflowContainer.querySelector('.form-container');
+          let html = formContainer.innerHTML;
+      
+          const vehicleModel = "Your Vehicle Model"; // You might want to get this from somewhere
+          const updateTime = new Date().toLocaleString('sv-SE'); // YYYY-MM-DD HH:MM:SS
+      
+          html = html.replace(/{{車架號碼}}/g, frameNumber || '');
+          html = html.replace(new RegExp(`{{${formId}_更新時間}}`, 'g'), updateTime);
+          
+          formContainer.innerHTML = html;
+      
+          // Also populate hidden fields
+          const frameNumberInput = form.querySelector('input[name="車架號碼"]');
+          if (frameNumberInput) frameNumberInput.value = frameNumber;
+      
+          const modelInput = form.querySelector('input[name="車輛型號"]');
+          if (modelInput) modelInput.value = vehicleModel;
+        },    
         // --- Base function to render a form from the backend ---
         async showFormBase(formId, isEdit, context) {
           try {
