@@ -474,17 +474,34 @@ const app = {
   // --- Handles form submission ---
   async handleFormSubmit(form) {
     this.showLoader('正在提交資料...');
-    const formData = new FormData(form);
 
-    // --- FINAL FIX ---
-    // Create a base object with essential data first, then merge form data into it.
-    // This prevents conflicts and ensures all data is captured reliably.
-    const baseData = {
-      formId: form.id,
-      車架號碼: this.state.currentFrameNumber,
-      userName: this.dom.userNameInput.value.trim()
-    };
-    const dataObject = { ...baseData, ...Object.fromEntries(formData.entries()) };
+    // --- FINAL, MORE ROBUST FIX ---
+    // Manually iterate over form elements to build the data object.
+    // This is more reliable than FormData if there are subtle HTML issues.
+    const dataObject = {};
+    for (const element of form.elements) {
+      if (element.name) {
+        switch (element.type) {
+          case 'radio':
+          case 'checkbox':
+            if (element.checked) {
+              dataObject[element.name] = element.value;
+            }
+            break;
+          case 'file':
+            // File handling is separate, below
+            break;
+          default:
+            dataObject[element.name] = element.value;
+            break;
+        }
+      }
+    }
+
+    // Now, override with the definitive data
+    dataObject.formId = form.id;
+    dataObject.車架號碼 = this.state.currentFrameNumber;
+    dataObject.userName = this.dom.userNameInput.value.trim();
     // --- END FIX ---
 
     const fileInputs = form.querySelectorAll('input[type="file"]');

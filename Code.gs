@@ -182,7 +182,7 @@ function processFormSubmit(formData) {
   // Prepare the data for sheet update
   const updates = {};
   for (const key in formData) {
-    if (key !== 'formId') {
+    if (key !== 'formId' && key !== 'userName') { // Exclude userName from the initial copy
       updates[key] = formData[key];
     }
   }
