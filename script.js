@@ -293,35 +293,42 @@ const app = {
   async showFormBase(formId, isEdit, context) {
     try {
       this.showLoader(`正在載入表單...`);
+      
+      // Set a loading placeholder immediately
+      this.dom.workflowContainer.innerHTML = `
+        <div class="content-card active">
+          <div class="workflow-header">
+            <h2>${context.title}</h2>
+            <p>${context.subtitle} | 作業人員: <strong>${this.dom.userNameInput.value.trim()}</strong></p>
+          </div>
+          <div class="form-container"><p>正在載入歷史資料...</p></div>
+          <div class="workflow-actions">
+            <button class.="btn-secondary" id="back-button">${context.backButtonText}</button>
+          </div>
+        </div>`;
+      this.dom.workflowContainer.querySelector('#back-button').addEventListener('click', context.backButtonAction);
+
+
       const formStructure = await this.fetchFormStructure(formId);
       if (!formStructure) throw new Error(`無法載入表單 ${formId} 的結構。`);
       
       formStructure.id = formId;
       const formHtml = this.buildFormHtml(formStructure);
-      const userName = this.dom.userNameInput.value.trim();
-
-      this.dom.workflowContainer.innerHTML = `
-        <div class="content-card active">
-          <div class="workflow-header">
-            <h2>${context.title}</h2>
-            <p>${context.subtitle} | 作業人員: <strong>${userName}</strong></p>
-          </div>
-          <div class="form-container">${formHtml}</div>
-          <div class="workflow-actions">
-            <button type="submit" form="${formId}" class="btn-primary">提交表單</button>
-            <button class="btn-secondary" id="back-button">${context.backButtonText}</button>
-          </div>
-        </div>`;
-        
+      
+      // Now, replace the placeholder with the actual form
+      this.dom.workflowContainer.querySelector('.form-container').innerHTML = formHtml;
+      
       const form = this.dom.workflowContainer.querySelector('form');
+      const submitButton = `<button type="submit" form="${formId}" class="btn-primary">提交表單</button>`;
+      this.dom.workflowContainer.querySelector('.workflow-actions').insertAdjacentHTML('afterbegin', submitButton);
+
       form.addEventListener('submit', this.handleFormSubmit.bind(this));
       
-      // Use Event Listener for the back button
-      this.dom.workflowContainer.querySelector('#back-button').addEventListener('click', context.backButtonAction);
-
       this.populateDynamicFields(form, formId, this.state.currentFrameNumber);
+      
       if (isEdit) {
-        this.loadAndPopulateFormData(form, formId, this.state.currentFrameNumber);
+        // The placeholder is already showing, now we just load the data
+        await this.loadAndPopulateFormData(form, formId, this.state.currentFrameNumber);
       }
       
       this.showScreen('workflow-container');
@@ -332,130 +339,55 @@ const app = {
     }
   },
 
-  // --- Shows a specific form ---
-  showForm(formId, frameNumber, isEdit = false) {
-    this.state.isEditMode = isEdit;
-    const formName = this.maintenanceData[formId] || formId;
-    const context = {
-      title: formName,
-      subtitle: `車架號碼: ${frameNumber}`,
-      backButtonText: '返回進度儀表板',
-      backButtonAction: () => this.fetchAndShowProgressDashboard(frameNumber)
-    };
-    this.showFormBase(formId, isEdit, context);
-  },
-  
-  // --- Shows a form that is not tied to a frame number ---
-  showDirectForm(formId) {
-    this.state.isEditMode = false; // These forms are typically for new entries
-    const formName = this.maintenanceData[formId] || formId;
-    const context = {
-        title: formName,
-        subtitle: '請填寫以下欄位',
-        backButtonText: '返回主畫面',
-        backButtonAction: () => this.goHome()
-    };
-    this.showFormBase(formId, false, context);
-  },
-
-  // --- Fetches form structure from the backend ---
-  fetchFormStructure(formId) {
-    return this.gasApi.run('getFormStructure', { formId }) // CONFIRMED: This action is correct
-      .then(response => {
-        if (response.success) return response.data;
-        throw new Error(response.message);
-      });
-  },
-
-  // --- Builds an HTML form from a JSON structure ---
-  buildFormHtml(formStructure) {
-    let html = `<form id="${formStructure.id}">`;
-    (formStructure.groups || []).forEach(group => {
-      html += `<fieldset class="form-group">`;
-      if (group.title) html += `<legend>${group.title}</legend>`;
-      (group.fields || []).forEach(field => {
-        const fieldId = `${formStructure.id}_${field.name}`;
-        html += `<div class="form-field type-${field.type}">
-                   <label for="${fieldId}">${field.label}</label>`;
-        switch (field.type) {
-          case 'radio':
-            (field.options || []).forEach(option => {
-              html += `<div class="radio-option">
-                         <input type="radio" id="${fieldId}_${option}" name="${field.name}" value="${option}" required>
-                         <label for="${fieldId}_${option}">${option}</label>
-                       </div>`;
-            });
-            break;
-          case 'file':
-            html += `<input type="file" id="${fieldId}" name="${field.name}" accept="image/*" onchange="previewImage(event, '${fieldId}_preview')">
-                     <img id="${fieldId}_preview" class="image-preview" src="#" alt="圖片預覽" style="display:none;">`;
-            break;
-          default:
-            html += `<input type="${field.type || 'text'}" id="${fieldId}" name="${field.name}" ${field.required ? 'required' : ''}>`;
-            break;
-        }
-        html += `</div>`;
-      });
-      html += `</fieldset>`;
-    });
-    html += `</form>`;
-    return html;
-  },
-
-  // --- Populates form fields with dynamic data ---
-  populateDynamicFields(form, formId, frameNumber) {
-    const userNameField = form.querySelector('[name="userName"]');
-    if (userNameField) userNameField.value = this.dom.userNameInput.value.trim();
-    
-    const frameNumberField = form.querySelector('[name="frameNumber"]');
-    if (frameNumberField) frameNumberField.value = frameNumber;
-    
-    const dateField = form.querySelector('[name="date"]');
-    if (dateField) dateField.valueAsDate = new Date();
-  },
-
   // --- Loads and populates a form with existing data ---
   loadAndPopulateFormData(form, formId, frameNumber) {
-    this.showLoader('正在載入歷史資料...');
-    this.gasApi.run('getFormResponseData', { formId, frameNumber })
-      .then(response => {
-        if (response.success && response.data) {
-          const formData = response.data;
-          for (const key in formData) {
-            // FIX: Handle cases where backend keys might have a redundant prefix (e.g., KD01_Item1)
-            const nameToFind = key.startsWith(formId + '_') ? key.substring(formId.length + 1) : key;
-            const element = form.querySelector(`[name="${nameToFind}"]`);
-            
-            if (element) {
-              switch (element.type) {
-                case 'radio':
-                  const radioToSelect = form.querySelector(`[name="${nameToFind}"][value="${formData[key]}"]`);
-                  if (radioToSelect) radioToSelect.checked = true;
-                  break;
-                case 'checkbox':
-                  element.checked = (formData[key] === true || formData[key] === 'true');
-                  break;
-                case 'file':
-                  if (typeof formData[key] === 'string' && formData[key].startsWith('http')) {
-                    const preview = document.getElementById(`${form.id}_${nameToFind}_preview`);
-                    if(preview) {
-                        preview.src = formData[key];
-                        preview.style.display = 'block';
+    // Return a promise to allow async/await
+    return new Promise((resolve, reject) => {
+      this.gasApi.run('getFormResponseData', { formId, frameNumber })
+        .then(response => {
+          if (response.success && response.data) {
+            const formData = response.data;
+            for (const key in formData) {
+              const nameToFind = key.startsWith(formId + '_') ? key.substring(formId.length + 1) : key;
+              const element = form.querySelector(`[name="${nameToFind}"]`);
+              
+              if (element) {
+                switch (element.type) {
+                  case 'radio':
+                    const radioToSelect = form.querySelector(`[name="${nameToFind}"][value="${formData[key]}"]`);
+                    if (radioToSelect) radioToSelect.checked = true;
+                    break;
+                  case 'checkbox':
+                    element.checked = (formData[key] === true || formData[key] === 'true');
+                    break;
+                  case 'file':
+                    if (typeof formData[key] === 'string' && formData[key].startsWith('http')) {
+                      const preview = document.getElementById(`${form.id}_${nameToFind}_preview`);
+                      if(preview) {
+                          preview.src = formData[key];
+                          preview.style.display = 'block';
+                      }
                     }
-                  }
-                  break;
-                default:
-                  element.value = formData[key];
-                  break;
+                    break;
+                  default:
+                    element.value = formData[key];
+                    break;
+                }
               }
             }
+            resolve(); // Resolve the promise on success
+          } else if (!response.success) {
+            this.showNotification(`無法載入資料: ${response.message}`, 'error');
+            reject(new Error(response.message)); // Reject on API error
+          } else {
+            resolve(); // Resolve even if there's no data
           }
-        } else if (!response.success) {
-          this.showNotification(`無法載入資料: ${response.message}`, 'error');
-        }
-      })
-      .catch(this.handleError.bind(this))
-      .finally(() => this.hideLoader());
+        })
+        .catch(err => {
+          this.handleError(err);
+          reject(err); // Reject on network or other errors
+        });
+    });
   },
 
   // --- Handles form submission ---
