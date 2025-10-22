@@ -3,7 +3,7 @@ const app = {
   // --- JSONP API Client ---
   gasApi: {
     run(action, params = {}) {
-      const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxMa4-FOJxRNReRUPDe5F2qTFAGUjP1pB-X5c6mVbFGBPg-sbRb0OTaxFQx8Y0z6OkNrQ/exec';
+      const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwUUkmgPjcIz47rgRqTsjUcaw9xAtwoBU_ibpgeENhY_4M8G1bk7BIr7FlHvw-3nNXGYQ/exec';
       
       console.log(`%c[API Request] -> ${action}`, 'color: #0052cc; font-weight: bold;', params);
 
