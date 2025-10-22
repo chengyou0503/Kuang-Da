@@ -121,9 +121,9 @@ const app = {
     const allForms = [...this.config.IN_FACTORY_FORMS, ...this.config.OUT_FACTORY_FORMS];
     for (const formId of allForms) {
       try {
-        // Corrected path to fetch from the public/forms directory
-        const response = await fetch(`./forms/${formId}.html`);
-        if (!response.ok) throw new Error(`Form ${formId} not found at ./forms/${formId}.html`);
+        // Corrected path to fetch from the public/forms directory using an absolute path
+        const response = await fetch(`/forms/${formId}.html`);
+        if (!response.ok) throw new Error(`Form ${formId} not found at /forms/${formId}.html`);
         this.state.formCache[formId] = await response.text();
       } catch (error) {
         console.error(`Failed to preload form ${formId}:`, error);
@@ -139,7 +139,7 @@ const app = {
       } else {
         // Fallback for forms that failed to preload
         console.warn(`Form ${formId} was not preloaded, fetching now.`);
-        fetch(`./forms/${formId}.html`)
+        fetch(`/forms/${formId}.html`)
           .then(response => {
             if (!response.ok) throw new Error(`Form ${formId} not found.`);
             return response.text();
@@ -300,8 +300,8 @@ const app = {
         </div>
       </div>`;
 
-    // Use Event Listeners instead of onclick
-    this.dom.workflowContainer.querySelector('#back-to-home').addEventListener('click', () => this.goHome());
+    // Use Event Listeners instead of onclick, ensuring 'this' context is correct
+    this.dom.workflowContainer.querySelector('#back-to-home').addEventListener('click', this.goHome.bind(this));
     this.dom.workflowContainer.querySelectorAll('.btn-primary').forEach(button => {
       button.addEventListener('click', (e) => {
         const formId = e.currentTarget.dataset.formId;
@@ -326,7 +326,7 @@ const app = {
     html += '</div>';
     this.dom.outFactoryContent.innerHTML = html;
 
-    // Use Event Listeners instead of onclick
+    // Use Event Listeners instead of onclick, ensuring 'this' context is correct
     this.dom.outFactoryContent.querySelectorAll('.btn-secondary').forEach(button => {
         button.addEventListener('click', (e) => {
             this.showDirectForm(e.currentTarget.dataset.formId);
