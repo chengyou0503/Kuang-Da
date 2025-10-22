@@ -472,6 +472,11 @@ const app = {
     const formData = new FormData(form);
     const dataObject = Object.fromEntries(formData.entries());
     dataObject.formId = form.id; // Add formId to the submission
+    // --- CRITICAL FIX ---
+    // Manually add frame number and user name to ensure they are always present.
+    dataObject.車架號碼 = this.state.currentFrameNumber;
+    dataObject.userName = this.dom.userNameInput.value.trim();
+    // --- END FIX ---
 
     const fileInputs = form.querySelectorAll('input[type="file"]');
     const imagePromises = Array.from(fileInputs).map(input => {
