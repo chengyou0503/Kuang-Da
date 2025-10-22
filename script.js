@@ -320,6 +320,32 @@ const app = {
     });
   },
 
+  // --- Shows a specific form ---
+  showForm(formId, frameNumber, isEdit = false) {
+    this.state.isEditMode = isEdit;
+    const formName = this.maintenanceData[formId] || formId;
+    const context = {
+      title: formName,
+      subtitle: `車架號碼: ${frameNumber}`,
+      backButtonText: '返回進度儀表板',
+      backButtonAction: () => this.fetchAndShowProgressDashboard(frameNumber)
+    };
+    this.showFormBase(formId, isEdit, context);
+  },
+  
+  // --- Shows a form that is not tied to a frame number ---
+  showDirectForm(formId) {
+    this.state.isEditMode = false; // These forms are typically for new entries
+    const formName = this.maintenanceData[formId] || formId;
+    const context = {
+        title: formName,
+        subtitle: '請填寫以下欄位',
+        backButtonText: '返回主畫面',
+        backButtonAction: () => this.goHome()
+    };
+    this.showFormBase(formId, false, context);
+  },
+
   // --- Renders buttons for out-of-factory forms ---
   renderOutFactoryForms() {
     if (!this.config.OUT_FACTORY_FORMS || this.config.OUT_FACTORY_FORMS.length === 0) {
