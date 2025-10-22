@@ -367,7 +367,6 @@ const app = {
           const modelInput = form.querySelector('input[name="車輛型號"]');
           if (modelInput) modelInput.value = vehicleModel;
         },    
-        // --- Base function to render a form from the backend ---
         async showFormBase(formId, isEdit, context) {
           try {
             this.showLoader(`正在載入表單...`);
@@ -375,7 +374,7 @@ const app = {
             const formHtml = await this.fetchFormStructure(formId);
             if (!formHtml) throw new Error(`無法載入表單 ${formId} 的 HTML。`);
       
-            // 1. Render the main structure WITHOUT the action buttons.
+            // 1. Render the main structure.
             this.dom.workflowContainer.innerHTML = `
               <div class="content-card active">
                 <div class="workflow-header">
@@ -384,13 +383,18 @@ const app = {
                 </div>
                 <div class="form-container">${formHtml}</div>
               </div>`;
+
+            // 2. CRITICAL FIX: Populate dynamic fields BEFORE getting the form reference.
+            // This is because populateDynamicFields re-renders the HTML, destroying old references.
+            this.populateDynamicFields(null, formId, this.state.currentFrameNumber); // Pass null for form, it's not used there
             
+            // 3. NOW, get the final, stable form reference.
             const form = this.dom.workflowContainer.querySelector('form');
             if (!form) throw new Error('在載入的 HTML 中找不到 <form> 元素。');
             
             form.id = formId;
 
-            // 2. Create the action buttons and append them INSIDE the form.
+            // 4. Create action buttons and append them INSIDE the form.
             const actionsDiv = document.createElement('div');
             actionsDiv.className = 'workflow-actions';
             actionsDiv.innerHTML = `
@@ -399,11 +403,9 @@ const app = {
             `;
             form.appendChild(actionsDiv);
       
-            // 3. Attach a 'submit' listener to the form - this is the correct way.
+            // 5. Attach a standard 'submit' listener to the form. This is the most reliable way.
             form.addEventListener('submit', this.handleFormSubmit);
-            this.dom.workflowContainer.querySelector('#back-button').addEventListener('click', context.backButtonAction);
-            
-            this.populateDynamicFields(form, form.id, this.state.currentFrameNumber);
+            form.querySelector('#back-button').addEventListener('click', context.backButtonAction);
             
             if (isEdit) {
               await this.loadAndPopulateFormData(form, form.id, this.state.currentFrameNumber);
