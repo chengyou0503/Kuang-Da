@@ -475,6 +475,15 @@ const app = {
   async handleFormSubmit(form) {
     this.showLoader('正在提交資料...');
 
+    // --- DEEPER DEBUGGING ---
+    console.log("--- Debugging Form Elements ---");
+    console.log("Form object:", form);
+    for (const element of form.elements) {
+      console.log(`Found element: Name='${element.name}', Type='${element.type}', Value='${element.value}', Checked='${element.checked}'`);
+    }
+    console.log("-----------------------------");
+    // --- END DEBUGGING ---
+
     // --- FINAL, MORE ROBUST FIX ---
     // Manually iterate over form elements to build the data object.
     // This is more reliable than FormData if there are subtle HTML issues.
