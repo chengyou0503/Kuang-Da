@@ -332,34 +332,23 @@ const app = {
         backButtonText: '返回主畫面',
         backButtonAction: () => this.goHome()
     };
-    this.showFormBase(formId, false, context);
-  },
-
-  // --- Renders buttons for out-of-factory forms ---
-  renderOutFactoryForms() {
-    if (!this.config.OUT_FACTORY_FORMS || this.config.OUT_FACTORY_FORMS.length === 0) {
-      this.dom.outFactoryContent.innerHTML = '<p>目前沒有廠外流程。</p>';
-      return;
-    }
+        this.showFormBase(formId, false, context);
+      },
     
-    let html = '<div class="out-factory-grid">';
-    this.config.OUT_FACTORY_FORMS.forEach(formId => {
-      const formName = this.maintenanceData[formId] || formId;
-      html += `<button class="btn-secondary" data-form-id="${formId}">${formName}</button>`;
-    });
-    html += '</div>';
-    this.dom.outFactoryContent.innerHTML = html;
-
-    // Use Event Listeners with pre-bound 'this'
-    this.dom.outFactoryContent.querySelectorAll('.btn-secondary').forEach(button => {
-        button.addEventListener('click', (e) => {
-            this.showDirectForm(e.currentTarget.dataset.formId);
-        });
-    });
-  },
-
-  // --- Base function to render a form from the backend ---
-  async showFormBase(formId, isEdit, context) {
+      // --- Populates form fields with dynamic data ---
+      populateDynamicFields(form, formId, frameNumber) {
+        const userNameField = form.querySelector('[name="userName"]');
+        if (userNameField) userNameField.value = this.dom.userNameInput.value.trim();
+        
+        const frameNumberField = form.querySelector('[name="frameNumber"]');
+        if (frameNumberField) frameNumberField.value = frameNumber;
+        
+        const dateField = form.querySelector('[name="date"]');
+        if (dateField) dateField.valueAsDate = new Date();
+      },
+    
+      // --- Base function to render a form from the backend ---
+      async showFormBase(formId, isEdit, context) {
     try {
       this.showLoader(`正在載入表單...`);
 
