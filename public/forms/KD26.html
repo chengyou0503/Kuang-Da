@@ -1,0 +1,57 @@
+<form id="KD26">
+  <fieldset class="form-group">
+    <legend>檢驗項目</legend>
+    <div class="form-field type-text">
+      <label for="KD26_KD26_車型代碼">車型代碼</label>
+      <input type="text" id="KD26_KD26_車型代碼" name="KD26_車型代碼" required="">
+    </div>
+    <div class="form-field type-text">
+      <label for="KD26_KD26_控制器廠牌型式">控制器廠牌型式</label>
+      <input type="text" id="KD26_KD26_控制器廠牌型式" name="KD26_控制器廠牌型式" required="">
+    </div>
+    <div class="form-field type-text">
+      <label for="KD26_KD26_控制器編號">控制器編號</label>
+      <input type="text" id="KD26_KD26_控制器編號" name="KD26_控制器編號" required="">
+    </div>
+    <div class="form-field type-radio">
+      <label for="KD26_KD26_規格是否一致">規格是否一致</label>
+      <div class="radio-option">
+        <input type="radio" id="KD26_KD26_規格是否一致_是" name="KD26_規格是否一致" value="是" required="">
+        <label for="KD26_KD26_規格是否一致_是">是</label>
+      </div>
+      <div class="radio-option">
+        <input type="radio" id="KD26_KD26_規格是否一致_否" name="KD26_規格是否一致" value="否" required="">
+        <label for="KD26_KD26_規格是否一致_否">否</label>
+      </div>
+    </div>
+    <div class="form-field type-radio">
+      <label for="KD26_KD26_標識是否正確">標識是否正確</label>
+      <div class="radio-option">
+        <input type="radio" id="KD26_KD26_標識是否正確_是" name="KD26_標識是否正確" value="是" required="">
+        <label for="KD26_KD26_標識是否正確_是">是</label>
+      </div>
+      <div class="radio-option">
+        <input type="radio" id="KD26_KD26_標識是否正確_否" name="KD26_標識是否正確" value="否" required="">
+        <label for="KD26_KD26_標識是否正確_否">否</label>
+      </div>
+    </div>
+  </fieldset>
+  <fieldset class="form-group">
+    <legend>照片上傳</legend>
+    <div class="form-field type-file">
+      <label for="KD26_photoData1">照片一</label>
+      <input type="file" id="KD26_photoData1" name="photoData1" accept="image/*" onchange="previewImage(event, 'KD26_photoData1_preview')">
+      <img id="KD26_photoData1_preview" class="image-preview" src="#" alt="圖片預覽" style="display:none;">
+    </div>
+    <div class="form-field type-file">
+      <label for="KD26_photoData2">照片二</label>
+      <input type="file" id="KD26_photoData2" name="photoData2" accept="image/*" onchange="previewImage(event, 'KD26_photoData2_preview')">
+      <img id="KD26_photoData2_preview" class="image-preview" src="#" alt="圖片預覽" style="display:none;">
+    </div>
+    <div class="form-field type-file">
+      <label for="KD26_photoData3">照片三</label>
+      <input type="file" id="KD26_photoData3" name="photoData3" accept="image/*" onchange="previewImage(event, 'KD26_photoData3_preview')">
+      <img id="KD26_photoData3_preview" class="image-preview" src="#" alt="圖片預覽" style="display:none;">
+    </div>
+  </fieldset>
+</form>

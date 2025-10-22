@@ -59,6 +59,7 @@ const app = {
     currentFrameNumber: null,
     qrScanner: null,
     isEditMode: false,
+    formCache: {}, // Cache for preloaded form HTML
   },
 
   // --- DOM Element Cache ---
@@ -99,6 +100,10 @@ const app = {
           const payload = response.data;
           this.config = payload.config;
           this.maintenanceData = payload.maintenanceData;
+          
+          // Preload forms for faster access
+          this.preloadForms(); 
+          
           this.setupEventListeners();
           this.renderTabs();
           this.loadPersistedData();
@@ -109,6 +114,46 @@ const app = {
       })
       .catch(this.handleError.bind(this))
       .finally(() => this.hideLoader());
+  },
+  
+  // --- Preloads all form HTML for instant access ---
+  async preloadForms() {
+    const allForms = [...this.config.IN_FACTORY_FORMS, ...this.config.OUT_FACTORY_FORMS];
+    for (const formId of allForms) {
+      try {
+        // Corrected path to fetch from the public/forms directory
+        const response = await fetch(`./forms/${formId}.html`);
+        if (!response.ok) throw new Error(`Form ${formId} not found at ./forms/${formId}.html`);
+        this.state.formCache[formId] = await response.text();
+      } catch (error) {
+        console.error(`Failed to preload form ${formId}:`, error);
+      }
+    }
+  },
+
+  // --- Fetches form structure from the local cache ---
+  fetchFormStructure(formId) {
+    return new Promise((resolve, reject) => {
+      if (this.state.formCache[formId]) {
+        resolve(this.state.formCache[formId]);
+      } else {
+        // Fallback for forms that failed to preload
+        console.warn(`Form ${formId} was not preloaded, fetching now.`);
+        fetch(`./forms/${formId}.html`)
+          .then(response => {
+            if (!response.ok) throw new Error(`Form ${formId} not found.`);
+            return response.text();
+          })
+          .then(html => {
+            this.state.formCache[formId] = html;
+            resolve(html);
+          })
+          .catch(error => {
+            this.handleError(`無法載入表單 ${formId}。`);
+            reject(error);
+          });
+      }
+    });
   },
 
   // --- Sets up all event listeners ---
@@ -301,34 +346,37 @@ const app = {
             <h2>${context.title}</h2>
             <p>${context.subtitle} | 作業人員: <strong>${this.dom.userNameInput.value.trim()}</strong></p>
           </div>
-          <div class="form-container"><p>正在載入歷史資料...</p></div>
+          <div class="form-container"><p>正在載入中...</p></div>
           <div class="workflow-actions">
-            <button class.="btn-secondary" id="back-button">${context.backButtonText}</button>
+            <button class="btn-secondary" id="back-button">${context.backButtonText}</button>
           </div>
         </div>`;
       this.dom.workflowContainer.querySelector('#back-button').addEventListener('click', context.backButtonAction);
 
-
-      const formStructure = await this.fetchFormStructure(formId);
-      if (!formStructure) throw new Error(`無法載入表單 ${formId} 的結構。`);
+      const formHtml = await this.fetchFormStructure(formId);
+      if (!formHtml) throw new Error(`無法載入表單 ${formId} 的 HTML。`);
       
-      formStructure.id = formId;
-      const formHtml = this.buildFormHtml(formStructure);
+      // Now, replace the placeholder with the actual form HTML
+      const formContainer = this.dom.workflowContainer.querySelector('.form-container');
+      formContainer.innerHTML = formHtml;
       
-      // Now, replace the placeholder with the actual form
-      this.dom.workflowContainer.querySelector('.form-container').innerHTML = formHtml;
+      const form = formContainer.querySelector('form');
+      if (!form) throw new Error('在載入的 HTML 中找不到 <form> 元素。');
       
-      const form = this.dom.workflowContainer.querySelector('form');
-      const submitButton = `<button type="submit" form="${formId}" class="btn-primary">提交表單</button>`;
+      const submitButton = `<button type="submit" form="${form.id}" class="btn-primary">提交表單</button>`;
       this.dom.workflowContainer.querySelector('.workflow-actions').insertAdjacentHTML('afterbegin', submitButton);
 
       form.addEventListener('submit', this.handleFormSubmit.bind(this));
       
-      this.populateDynamicFields(form, formId, this.state.currentFrameNumber);
+      this.populateDynamicFields(form, form.id, this.state.currentFrameNumber);
       
       if (isEdit) {
-        // The placeholder is already showing, now we just load the data
-        await this.loadAndPopulateFormData(form, formId, this.state.currentFrameNumber);
+        formContainer.innerHTML = `<p>正在載入歷史資料...</p>`;
+        await this.loadAndPopulateFormData(form, form.id, this.state.currentFrameNumber);
+        // After loading, re-insert the form HTML
+        formContainer.innerHTML = formHtml;
+        // And re-populate it
+        await this.loadAndPopulateFormData(form, form.id, this.state.currentFrameNumber);
       }
       
       this.showScreen('workflow-container');

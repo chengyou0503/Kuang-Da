@@ -54,6 +54,7 @@ body {
 
 
 .main-container { padding: 1rem; max-width: 800px; margin: 0 auto; }
+.admin-main-container { padding: 1rem; max-width: 1200px; margin: 0 auto; }
 .content-card { 
   background-color: var(--card-bg); 
   border-radius: 12px; 
