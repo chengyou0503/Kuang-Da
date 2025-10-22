@@ -565,3 +565,7 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
 .form-table input[type="text"] {
   width: 95%;
 }
+
+.form-table td[data-label="項目"] {
+  text-align: left;
+}
