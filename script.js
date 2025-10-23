@@ -340,34 +340,12 @@ const app = {
 
   // --- Navigates back to the home screen ---
   goHome() {
-    this.removeFormStylesheet(); // Remove form-specific styles
     this.showScreen('home-screen');
     this.setActiveTab('in-factory'); // Reset to default tab
   },
 
-  // --- Dynamically adds or removes the form-specific stylesheet ---
-  loadFormStylesheet() {
-    if (!document.getElementById('form-stylesheet')) {
-      const link = document.createElement('link');
-      link.id = 'form-stylesheet';
-      link.rel = 'stylesheet';
-      link.href = 'form-style.css';
-      document.head.appendChild(link);
-      document.body.classList.add('form-active');
-    }
-  },
-
-  removeFormStylesheet() {
-    const link = document.getElementById('form-stylesheet');
-    if (link) {
-      link.parentNode.removeChild(link);
-      document.body.classList.remove('form-active');
-    }
-  },
-
   // --- Shows a specific form ---
   showForm(formId, frameNumber, isEdit = false) {
-    this.loadFormStylesheet(); // Load form-specific styles
     this.state.isEditMode = isEdit;
     const formName = this.maintenanceData[formId] || formId;
     const context = {
@@ -381,7 +359,6 @@ const app = {
   
   // --- Shows a form that is not tied to a frame number ---
   showDirectForm(formId) {
-    this.loadFormStylesheet(); // Load form-specific styles
     this.state.isEditMode = false; // These forms are typically for new entries
     const formName = this.maintenanceData[formId] || formId;
     const context = {
