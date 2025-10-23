@@ -3,17 +3,17 @@
 
 /* --- Root Variables --- */
 :root {
-  --primary-text-color: #212529;
-  --secondary-text-color: #6c757d;
-  --background-color: #f8f9fa;
+  --primary-text-color: #333;
+  --secondary-text-color: #555;
+  --background-color: #f4f7f9;
   --card-background-color: #ffffff;
-  --border-color: #dee2e6;
-  --accent-color: #0d6efd;
-  --accent-color-hover: #0b5ed7;
-  --success-color: #198754;
+  --border-color: #dce1e6;
+  --accent-color: #007bff;
+  --accent-color-hover: #0056b3;
+  --success-color: #28a745;
   --error-color: #dc3545;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* --- Global Styles & Reset --- */
@@ -21,132 +21,116 @@ body.form-active {
   font-family: 'Noto Sans TC', sans-serif;
   background-color: var(--background-color);
   color: var(--primary-text-color);
-  line-height: 1.7;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 1rem;
 }
 
 /* --- Layout --- */
-.form-active .workflow-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+.form-active .form-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    color: var(--primary-text-color);
 }
 
-.form-active .content-card {
-  background-color: var(--card-background-color);
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-sm);
-  padding: 2rem;
-  margin-bottom: 2rem;
+.form-active .form-id {
+    text-align: right;
+    color: var(--secondary-text-color);
+    margin-bottom: 1rem;
 }
 
-/* --- Typography --- */
-.form-active h1, .form-active h2, .form-active h3, .form-active h4, .form-active h5, .form-active h6 {
-  margin-bottom: 0.75rem;
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-.form-active h1 { font-size: 2.25rem; }
-.form-active h2 { font-size: 1.75rem; }
-.form-active h3 { font-size: 1.25rem; font-weight: 500; }
-.form-active p { margin-bottom: 1rem; }
-
-.form-active .workflow-header p {
-  color: var(--secondary-text-color);
-}
-
-/* --- Buttons --- */
-.form-active .btn-primary, .form-active .btn-secondary {
-  display: inline-block;
-  font-weight: 500;
-  text-align: center;
-  cursor: pointer;
-  border: 1px solid transparent;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  transition: all 0.2s ease-in-out;
-  text-decoration: none;
-}
-
-.form-active .btn-primary {
-  color: #fff;
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
-}
-.form-active .btn-primary:hover {
-  background-color: var(--accent-color-hover);
-  border-color: var(--accent-color-hover);
-}
-
-.form-active .btn-secondary {
-  color: #fff;
-  background-color: var(--secondary-text-color);
-  border-color: var(--secondary-text-color);
-}
-.form-active .btn-secondary:hover {
-  background-color: #5a6268;
-  border-color: #545b62;
-}
-
-/* --- Forms --- */
-.form-active .workflow-actions {
-  margin-top: 1.5rem;
-  display: flex;
-  gap: 1rem;
-}
-
-/* --- Table Styles (Desktop First) --- */
 .form-active .form-table-wrapper {
+  background-color: var(--card-background-color);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  padding: 2rem;
+  margin: 0 auto;
+  max-width: 1000px;
   overflow-x: auto;
 }
 
+/* --- Table Styles --- */
 .form-active .form-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 1.5rem;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .form-active .form-table th,
 .form-active .form-table td {
   border: 1px solid var(--border-color);
-  padding: 0.8rem 1rem;
+  padding: 1rem 1.25rem;
   text-align: left;
   vertical-align: middle;
 }
 
 .form-active .form-table thead th {
-  background-color: var(--background-color);
-  font-weight: 500;
+  background-color: #f8f9fa;
+  font-weight: 700;
   text-align: center;
+  font-size: 1rem;
 }
 
-.form-active .form-table .radio-group {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
+.form-active .form-table tbody tr:hover {
+    background-color: #fbfcfe;
 }
+
+.form-active .form-table td.header-cell {
+    background-color: #f8f9fa;
+    font-weight: 500;
+}
+
+/* --- Form Elements --- */
+.form-active input[type="text"] {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-active input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+.form-active .radio-option {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+}
+
+.form-active input[type="radio"] {
+    margin-right: 0.5rem;
+    width: 1.15em;
+    height: 1.15em;
+    cursor: pointer;
+}
+
+.form-active .radio-option label {
+    cursor: pointer;
+    margin-right: 1rem;
+}
+
 
 /* --- Responsive Table Styles (Mobile) --- */
 @media screen and (max-width: 768px) {
-  .form-active .workflow-container {
-    margin: 1rem auto;
+  body.form-active {
+    padding: 0.5rem;
   }
-  .form-active .content-card {
+  .form-active .form-table-wrapper {
     padding: 1rem;
-  }
-  .form-active .workflow-actions {
-    flex-direction: column;
-  }
-  .form-active .btn-primary, .form-active .btn-secondary {
-    width: 100%;
+    box-shadow: var(--shadow-sm);
   }
 
   .form-active .form-table thead {
-    display: none; /* Hide headers on mobile */
+    display: none;
   }
 
   .form-active .form-table, .form-active .form-table tbody, .form-active .form-table tr, .form-active .form-table td {
@@ -155,10 +139,10 @@ body.form-active {
   }
 
   .form-active .form-table tr {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 0.5rem;
+    border-radius: 8px;
+    padding: 1rem;
   }
   .form-active .form-table tr:last-child {
     margin-bottom: 0;
@@ -166,8 +150,8 @@ body.form-active {
 
   .form-active .form-table td {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     text-align: left;
     padding: 0.75rem;
     border: none;
@@ -177,14 +161,14 @@ body.form-active {
     border-bottom: none;
   }
 
-  .form-active .form-table td[data-label]::before {
-    content: attr(data-label);
-    font-weight: 500;
-    text-align: left;
-    margin-right: 1rem;
+  .form-active .form-table td::before {
+    content: attr(data-label); /* This needs data-label attributes in HTML to work */
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--secondary-text-color);
   }
 
-  .form-active .form-table .radio-group {
-    justify-content: flex-end;
+  .form-active .radio-option {
+    justify-content: flex-start;
   }
 }
