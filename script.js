@@ -150,7 +150,7 @@ const app = {
       } else {
         // Fallback for forms that failed to preload
         console.warn(`Form ${formId} was not preloaded, fetching now.`);
-        fetch(`forms/${formId}.html`)
+        fetch(`forms/${formId}.html?t=${new Date().getTime()}`)
           .then(response => {
             if (!response.ok) throw new Error(`Form ${formId} not found.`);
             return response.text();
