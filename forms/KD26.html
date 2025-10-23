@@ -10,22 +10,22 @@
         <div class="form-table-wrapper">
             <table class="form-table">
                 <tr>
-                    <td style="width: 25%;" data-label="日期"><b>日期</b></td>
-                    <td style="width: 25%;" data-label="日期內容">{{KD26_更新時間}}</td>
-                    <td style="width: 25%;" data-label="審驗合格證明"><b>審驗合格證明</b></td>
-                    <td style="width: 25%;" data-label="證明內容">微電審(113)字第1006號</td>
+                    <td style="width: 25%;"><b>日期</b></td>
+                    <td style="width: 25%;">{{KD26_更新時間}}</td>
+                    <td style="width: 25%;"><b>審驗合格證明</b></td>
+                    <td style="width: 25%;">微電審(113)字第1006號</td>
                 </tr>
                 <tr>
-                    <td data-label="車輛型式"><b>車輛型式</b></td>
-                    <td data-label="型式內容">{{車輛型號}}</td>
-                    <td data-label="車型代碼"><b>車型代碼</b></td>
-                    <td data-label="代碼內容"><input type="text" name="KD26_車型代碼" required> {{KD26_車型代碼}}</td>
+                    <td><b>車輛型式</b></td>
+                    <td>{{車輛型號}}</td>
+                    <td><b>車型代碼</b></td>
+                    <td><input type="text" name="KD26_車型代碼" required> {{KD26_車型代碼}}</td>
                 </tr>
                 <tr>
-                    <td data-label="車架號碼"><b>車架號碼</b></td>
-                    <td data-label="號碼內容">{{車架號碼}}</td>
-                    <td data-label="控制器廠牌/型式"><b>控制器廠牌/型式</b></td>
-                    <td data-label="型式內容"><input type="text" name="KD26_控制器廠牌型式" required> {{KD26_控制器廠牌型式}}</td>
+                    <td><b>車架號碼</b></td>
+                    <td>{{車架號碼}}</td>
+                    <td><b>控制器廠牌/型式</b></td>
+                    <td><input type="text" name="KD26_控制器廠牌型式" required> {{KD26_控制器廠牌型式}}</td>
                 </tr>
             </table>
             <div class="photo-section">
@@ -69,17 +69,17 @@
                 <!-- PDF 專用佔位符 -->
                 <table class="form-table for-pdf" style="display:none; margin-top: 1rem;">
                     <tr>
-                        <td style="width:50%;" data-label="控制器裝置於車輛照片">
+                        <td style="width:50%;">
                             <h4>控制器裝置於車輛照片</h4>
                             {{photoUrl1}}
                         </td>
-                        <td style="width:50%;" data-label="控制器黏貼合格標識照片">
+                        <td style="width:50%;">
                             <h4>控制器黏貼合格標識照片</h4>
                             {{photoUrl2}}
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" data-label="車架號碼照片">
+                        <td colspan="2">
                             <h4>車架號碼照片</h4>
                             {{photoUrl3}}
                         </td>
@@ -88,12 +88,12 @@
             </div>
             <table class="form-table" style="margin-top: 1rem;">
                 <tr>
-                    <td data-label="項目"><b>控制器是否為檢驗合格且規格與審查報告/測試報告宣告一致</b></td>
-                    <td data-label="結果"><input type="text" name="KD26_規格是否一致" value="符合規格、報告" required readonly> {{KD26_規格是否一致}}</td>
+                    <td><b>控制器是否為檢驗合格且規格與審查報告/測試報告宣告一致</b></td>
+                    <td><input type="text" name="KD26_規格是否一致" value="符合規格、報告" required readonly> {{KD26_規格是否一致}}</td>
                 </tr>
                 <tr>
-                    <td data-label="項目"><b>是否使用正確之控制器合格標識</b></td>
-                    <td data-label="結果"><input type="text" name="KD26_標識是否正確" value="核對正確" required readonly> {{KD26_標識是否正確}}</td>
+                    <td><b>是否使用正確之控制器合格標識</b></td>
+                    <td><input type="text" name="KD26_標識是否正確" value="核對正確" required readonly> {{KD26_標識是否正確}}</td>
                 </tr>
             </table>
         </div>
