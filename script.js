@@ -132,8 +132,8 @@ const app = {
     const allForms = [...this.config.IN_FACTORY_FORMS, ...this.config.OUT_FACTORY_FORMS];
     for (const formId of allForms) {
       try {
-        // Corrected path to fetch from the root forms directory
-        const response = await fetch(`forms/${formId}.html`);
+        // Corrected path to fetch from the root forms directory with cache-busting
+        const response = await fetch(`forms/${formId}.html?t=${new Date().getTime()}`);
         if (!response.ok) throw new Error(`Form ${formId} not found at forms/${formId}.html`);
         this.state.formCache[formId] = await response.text();
       } catch (error) {
