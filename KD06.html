@@ -7,22 +7,32 @@
         <input type="hidden" name="車輛型號">
         <p class="form-id">表單編號：KD-06</p>
         <h3 class="form-title">車輛完成品品質管制檢查表</h3>
+
+        <div class="form-header-grid">
+            <div class="header-item">
+                <span class="header-label">合格證核准字號</span>
+                <span class="header-value">微電審(113)字第1006 號</span>
+            </div>
+            <div class="header-item">
+                <span class="header-label">抽驗日期</span>
+                <span class="header-value">{{KD06_更新時間}}</span>
+            </div>
+            <div class="header-item">
+                <span class="header-label">廠牌名稱</span>
+                <span class="header-value">KD-礦達</span>
+            </div>
+            <div class="header-item">
+                <span class="header-label">型號/顏色</span>
+                <input type="text" name="KD06_型號顏色" required>
+            </div>
+            <div class="header-item full-width">
+                <span class="header-label">車身號碼</span>
+                <span class="header-value">{{車架號碼}}</span>
+            </div>
+        </div>
+
         <div class="form-table-wrapper">
             <table class="form-table">
-                <tr>
-                    <td class="header-cell"><b>合格證核准字號</b></td>
-                    <td colspan="5">微電審(113)字第1006 號</td>
-                    <td class="header-cell"><b>抽驗日期</b></td>
-                    <td colspan="3">{{KD06_更新時間}}</td>
-                </tr>
-                <tr>
-                    <td class="header-cell"><b>廠牌名稱</b></td>
-                    <td colspan="2">KD-礦達</td>
-                    <td class="header-cell"><b>型號/顏色</b></td>
-                    <td colspan="2"><input type="text" name="KD06_型號顏色" required></td>
-                    <td class="header-cell"><b>車身號碼</b></td>
-                    <td colspan="3">{{車架號碼}}</td>
-                </tr>
                 <thead>
                     <tr>
                         <th>檢測項目</th>

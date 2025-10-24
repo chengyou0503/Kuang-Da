@@ -28,7 +28,7 @@ body.form-active {
   padding: 1rem;
 }
 
-/* --- Layout --- */
+/* --- Typography --- */
 .form-active .form-title {
     text-align: center;
     margin-bottom: 1.5rem;
@@ -42,6 +42,7 @@ body.form-active {
     margin-bottom: 1rem;
 }
 
+/* --- Layout --- */
 .form-active .form-table-wrapper {
   background-color: var(--card-background-color);
   border-radius: 12px;
@@ -52,6 +53,43 @@ body.form-active {
   max-width: 1000px;
   overflow-x: auto;
 }
+
+/* --- Form Header Grid --- */
+.form-header-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--card-background-color);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  max-width: 1000px;
+  margin: 0 auto 2rem auto;
+}
+
+.header-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.header-label {
+  font-weight: 500;
+  color: var(--secondary-text-color);
+  font-size: 0.9rem;
+}
+
+.header-value {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.header-item.full-width {
+  grid-column: 1 / -1;
+}
+
 
 /* --- Table Styles --- */
 .form-active .form-table {
@@ -77,11 +115,6 @@ body.form-active {
 
 .form-active .form-table tbody tr:hover {
     background-color: #fbfcfe;
-}
-
-.form-active .form-table td.header-cell {
-    background-color: #f8f9fa;
-    font-weight: 500;
 }
 
 /* --- Form Elements --- */
@@ -124,9 +157,14 @@ body.form-active {
   body.form-active {
     padding: 0.5rem;
   }
-  .form-active .form-table-wrapper {
+  .form-active .form-table-wrapper,
+  .form-header-grid {
     padding: 1rem;
     box-shadow: var(--shadow-sm);
+  }
+
+  .form-header-grid {
+    grid-template-columns: 1fr;
   }
 
   .form-active .form-table thead {
