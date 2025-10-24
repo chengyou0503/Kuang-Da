@@ -133,9 +133,8 @@ const app = {
     for (const formId of allForms) {
       try {
         // Corrected path to fetch from the root forms directory with cache-busting
-        const response = await fetch(`forms/${formId}.html?t=${new Date().getTime()}`);
-        if (!response.ok) throw new Error(`Form ${formId} not found at forms/${formId}.html`);
-        this.state.formCache[formId] = await response.text();
+        const response = await fetch(`${formId}.html?t=${new Date().getTime()}`);
+        if (!response.ok) throw new Error(`Form ${formId} not found at ${formId}.html`);        this.state.formCache[formId] = await response.text();
       } catch (error) {
         console.error(`Failed to preload form ${formId}:`, error);
       }
@@ -150,7 +149,7 @@ const app = {
       } else {
         // Fallback for forms that failed to preload
         console.warn(`Form ${formId} was not preloaded, fetching now.`);
-        fetch(`forms/${formId}.html?t=${new Date().getTime()}`)
+        fetch(`${formId}.html?t=${new Date().getTime()}`)
           .then(response => {
             if (!response.ok) throw new Error(`Form ${formId} not found.`);
             return response.text();
