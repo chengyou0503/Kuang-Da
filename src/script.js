@@ -1,4 +1,22 @@
 /* global Html5Qrcode */
+
+// --- ULTIMATE CACHE BUSTING ---
+// This code checks for and unregisters any old service workers that might be caching the site.
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    if (registrations.length > 0) {
+      console.log('Found old service workers, unregistering...');
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+      // After unregistering, force a hard reload of the page.
+      window.location.reload(true);
+    }
+  });
+}
+// --- END CACHE BUSTING ---
+
+
 const app = {
   // --- API Client for Google Apps Script ---
   gasApi: {
@@ -132,9 +150,9 @@ const app = {
     const allForms = [...this.config.IN_FACTORY_FORMS, ...this.config.OUT_FACTORY_FORMS];
     for (const formId of allForms) {
       try {
-        // Corrected path to fetch from the root forms directory with cache-busting
         const response = await fetch(`${formId}.html?t=${new Date().getTime()}`);
-        if (!response.ok) throw new Error(`Form ${formId} not found at ${formId}.html`);        this.state.formCache[formId] = await response.text();
+        if (!response.ok) throw new Error(`Form ${formId} not found at ${formId}.html`);
+        this.state.formCache[formId] = await response.text();
       } catch (error) {
         console.error(`Failed to preload form ${formId}:`, error);
       }
