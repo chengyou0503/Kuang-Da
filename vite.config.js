@@ -2,13 +2,16 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path'
 
 export default defineConfig({
+  // Set the project root to the 'public' directory
+  root: 'public',
   base: '/Kuang-Da/',
-  // The root is the project directory, not 'public'
-  root: resolve(__dirname), 
   build: {
-    outDir: 'dist',
+    // The output directory is relative to the project root, so we go one level up.
+    outDir: '../dist',
+    // Ensure the dist directory is cleared before each build
     emptyOutDir: true,
     rollupOptions: {
+      // Input paths are now relative to the 'root' ('public')
       input: {
         main: resolve(__dirname, 'public/index.html'),
         Admin: resolve(__dirname, 'public/Admin.html'),
