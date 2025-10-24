@@ -1,26 +1,25 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
+import { glob } from 'glob'
 
-// https://vite.dev/config/
+// Find all HTML files in the public directory
+const htmlFiles = glob.sync('public/**/*.html').reduce((acc, file) => {
+  const name = file.replace('public/', '').replace('.html', '')
+  acc[name] = resolve(__dirname, file)
+  return acc
+}, {})
+
 export default defineConfig({
   plugins: [
     react()
   ],
+  root: 'public', // Set the project root to the public directory
   base: '/Kuang-Da/',
   build: {
+    outDir: '../dist', // Output directory relative to the root
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html'),
-        admin: resolve(__dirname, 'Admin.html'),
-        kd03: resolve(__dirname, 'KD03.html'),
-        kd04: resolve(__dirname, 'KD04.html'),
-        kd06: resolve(__dirname, 'KD06.html'),
-        kd12: resolve(__dirname, 'KD12.html'),
-        kd22: resolve(__dirname, 'KD22.html'),
-        kd25: resolve(__dirname, 'KD25.html'),
-        kd26: resolve(__dirname, 'KD26.html'),
-      }
+      input: htmlFiles
     }
   }
 })
