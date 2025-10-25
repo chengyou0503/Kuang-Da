@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <form>
+        <input type="hidden" name="formId" value="KD22">
+        <input type="hidden" name="車架號碼">
+        <input type="hidden" name="車輛型號">
+        <p class="form-id">表單編號：KD-22</p>
+        <h3 class="form-title">來料檢驗記錄總表</h3>
+        <div class="form-table-wrapper">
+            <table class="form-table">
+                <tr>
+                    <td class="header-cell"><b>日期</b></td>
+                    <td><input type="text" name="KD22_Date" required></td>
+                    <td class="header-cell"><b>料號</b></td>
+                    <td><input type="text" name="KD22_PartNumber" required></td>
+                </tr>
+                <tr>
+                    <td class="header-cell"><b>品名</b></td>
+                    <td><input type="text" name="KD22_ProductName" required></td>
+                    <td class="header-cell"><b>廠商</b></td>
+                    <td><input type="text" name="KD22_Supplier" required></td>
+                </tr>
+                <tr>
+                    <td class="header-cell"><b>收料數量</b></td>
+                    <td><input type="text" name="KD22_Quantity" required></td>
+                    <td class="header-cell"><b>發料單號</b></td>
+                    <td><input type="text" name="KD22_IssueNumber" required></td>
+                </tr>
+                <thead>
+                    <tr>
+                        <th colspan="2">檢驗項目</th>
+                        <th>規格</th>
+                        <th>檢驗記錄</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="5" style="vertical-align: middle; text-align: center;">外觀</td>
+                        <td>1. 表面塗裝顏色</td>
+                        <td>合乎色板</td>
+                        <td>
+                            <div class="radio-option"><input type="radio" id="spec1_ok" name="KD22_Spec1" value="OK" required><label for="spec1_ok">OK</label></div>
+                            <div class="radio-option"><input type="radio" id="spec1_ng" name="KD22_Spec1" value="NG"><label for="spec1_ng">NG</label></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2. 電鍍或烤漆</td>
+                        <td>均勻、無脫落</td>
+                        <td>
+                            <div class="radio-option"><input type="radio" id="spec2_ok" name="KD22_Spec2" value="OK" required><label for="spec2_ok">OK</label></div>
+                            <div class="radio-option"><input type="radio" id="spec2_ng" name="KD22_Spec2" value="NG"><label for="spec2_ng">NG</label></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3. 刮傷</td>
+                        <td>無</td>
+                        <td>
+                            <div class="radio-option"><input type="radio" id="spec3_ok" name="KD22_Spec3" value="OK" required><label for="spec3_ok">OK</label></div>
+                            <div class="radio-option"><input type="radio" id="spec3_ng" name="KD22_Spec3" value="NG"><label for="spec3_ng">NG</label></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4. 變形</td>
+                        <td>無</td>
+                        <td>
+                            <div class="radio-option"><input type="radio" id="spec4_ok" name="KD22_Spec4" value="OK" required><label for="spec4_ok">OK</label></div>
+                            <div class="radio-option"><input type="radio" id="spec4_ng" name="KD22_Spec4" value="NG"><label for="spec4_ng">NG</label></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5. 毛邊</td>
+                        <td>無</td>
+                        <td>
+                            <div class="radio-option"><input type="radio" id="spec5_ok" name="KD22_Spec5" value="OK" required><label for="spec5_ok">OK</label></div>
+                            <div class="radio-option"><input type="radio" id="spec5_ng" name="KD22_Spec5" value="NG"><label for="spec5_ng">NG</label></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">尺寸</td>
+                        <td>合乎圖面</td>
+                        <td>
+                            <div class="radio-option"><input type="radio" id="spec6_ok" name="KD22_Spec6" value="OK" required><label for="spec6_ok">OK</label></div>
+                            <div class="radio-option"><input type="radio" id="spec6_ng" name="KD22_Spec6" value="NG"><label for="spec6_ng">NG</label></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">材質</td>
+                        <td>合乎規範</td>
+                        <td>
+                            <div class="radio-option"><input type="radio" id="spec7_ok" name="KD22_Spec7" value="OK" required><label for="spec7_ok">OK</label></div>
+                            <div class="radio-option"><input type="radio" id="spec7_ng" name="KD22_Spec7" value="NG"><label for="spec7_ng">NG</label></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">硬度</td>
+                        <td>合乎規範</td>
+                        <td>
+                            <div class="radio-option"><input type="radio" id="spec8_ok" name="KD22_Spec8" value="OK" required><label for="spec8_ok">OK</label></div>
+                            <div class="radio-option"><input type="radio" id="spec8_ng" name="KD22_Spec8" value="NG"><label for="spec8_ng">NG</label></div>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td colspan="3"><b>判定結果</b></td>
+                        <td>
+                            <div class="radio-option"><input type="radio" id="final_ok" name="KD22_Final" value="允收" required><label for="final_ok">允收</label></div>
+                            <div class="radio-option"><input type="radio" id="final_rework" name="KD22_Final" value="特採"><label for="final_rework">特採</label></div>
+                            <div class="radio-option"><input type="radio" id="final_scrap" name="KD22_Final" value="拒收"><label for="final_scrap">拒收</label></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</body>
+</html>

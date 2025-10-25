@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>車輛品管流程系統</title>
+    <link rel="icon" type="image/svg+xml" href="/Kuang-Da/assets/favicon-Dirj2wS1.svg">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script type="module" crossorigin src="/Kuang-Da/assets/main-Dm7ncxYM.js"></script>
+    <link rel="modulepreload" crossorigin href="/Kuang-Da/assets/style-b02JLB5g.js">
+    <link rel="stylesheet" crossorigin href="/Kuang-Da/assets/style-By3cNxit.css">
+  </head>
+  <body>
+    <!-- SVG 圖標定義 -->
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <symbol id="icon-scan" viewBox="0 0 24 24">
+          <path d="M4 4h4v2H4v4H2V4h2zm16 0h-4v2h4v4h2V4h-2zM4 20H2v-4h2v4zm16 0v-4h2v4h-2zM9 9v6h6V9H9z"/>
+        </symbol>
+      </defs>
+    </svg>
+
+    <header class="app-header">
+      <h1>車輛品管流程系統</h1>
+    </header>
+    <main id="main-content" class="main-container">
+      <div id="home-screen" class="content-card active">
+        <div class="input-group">
+            <label for="user-name-input">作業人員:</label>
+            <input type="text" id="user-name-input" placeholder="請輸入您的姓名或工號">
+        </div>
+
+        <div id="tabs-container">
+            <button class="tab active" data-tab="in-factory">廠內流程</button>
+            <button class="tab" data-tab="out-factory">廠外流程</button>
+        </div>
+
+        <div id="in-factory-content">
+            <p class="instruction-text">請輸入或掃描車輛的車架號碼以查詢進度。</p>
+            <div id="input-area">
+              <input type="text" id="frame-number-input" placeholder="輸入或掃描車架號碼">
+              <button id="scan-btn" title="掃描 QR Code" class="btn-icon">
+                 <svg width="24" height="24"><use xlink:href="#icon-scan"></use></svg>
+              </button>
+            </div>
+            <button id="start-btn" class="btn-primary">查詢進度 / 開始作業</button>
+            <div id="qr-reader-container">
+                <div id="qr-reader" style="display:none;"></div>
+            </div>
+        </div>
+
+        <div id="out-factory-content" style="display: none;">
+            <!-- This will be populated by JavaScript -->
+        </div>
+
+        <hr class="divider">
+        <a href="Admin.html">
+            <button class="btn-secondary">前往批量導出工具</button>
+        </a>
+      </div>
+      <div id="workflow-container"></div>
+    </main>
+    <footer class="app-footer">
+      <p>&copy; 2025 品管系統</p>
+    </footer>
+
+    <div id="loader" class="hidden">
+      <div class="spinner"></div>
+      <p>處理中...</p>
+    </div>
+
+    <div id="notification" class="hidden"></div>
+
+  </body>
+</html>
